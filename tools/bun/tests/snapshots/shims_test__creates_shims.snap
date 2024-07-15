@@ -1,0 +1,13 @@
+---
+source: tests/shims_test.rs
+expression: "std::fs::read_to_string(sandbox.path().join(\".proto/shims/registry.json\")).unwrap()"
+---
+{
+  "bun-test": {},
+  "bunx": {
+    "parent": "bun-test",
+    "before_args": [
+      "x"
+    ]
+  }
+}

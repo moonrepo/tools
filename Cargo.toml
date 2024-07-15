@@ -1,6 +1,17 @@
 [workspace]
 resolver = "2"
-members = ["crates/*", "tools/*"]
+members = [
+	# "crates/*",
+	"tools/*",
+]
+
+[workspace.dependencies]
+extism-pdk = { version = "1.2.0" }
+proto_pdk = { version = "0.21.2" }                  #, path = "../../proto/crates/pdk" }
+proto_pdk_test_utils = { version = "0.25.2" }       #, path = "../../proto/crates/pdk-test-utils" }
+serde = "1.0.203"
+starbase_sandbox = "0.7.0"
+tokio = { version = "1.38.0", features = ["full"] }
 
 [profile.release]
 codegen-units = 1
