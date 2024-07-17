@@ -1,0 +1,24 @@
+[package]
+name = "deno_plugin"
+version = "0.11.2"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ['cdylib']
+test = false
+
+[dependencies]
+extism-pdk = { workspace = true }
+proto_pdk = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+proto_pdk_test_utils = { workspace = true }
+starbase_sandbox = { workspace = true }
+tokio = { workspace = true }
+
+[features]
+default = ["wasm"]
+wasm = []

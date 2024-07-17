@@ -1,2 +1,3 @@
 [plugins]
 bun-test = "source:target/wasm32-wasi/debug/bun_plugin.wasm"
+deno-test = "source:target/wasm32-wasi/debug/deno_plugin.wasm"
