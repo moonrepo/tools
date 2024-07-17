@@ -1,0 +1,13 @@
+---
+source: crates/node-depman/tests/shims_test.rs
+expression: "std::fs::read_to_string(sandbox.path().join(\".proto/shims/registry.json\")).unwrap()"
+---
+{
+  "pnpm-test": {},
+  "pnpx": {
+    "parent": "pnpm-test",
+    "before_args": [
+      "dlx"
+    ]
+  }
+}

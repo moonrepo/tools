@@ -1,20 +1,23 @@
 [workspace]
 resolver = "2"
-members = [
-	# "crates/*",
-	"tools/*",
-]
+members = ["crates/*", "tools/*"]
 
 [workspace.dependencies]
+# Common
 extism-pdk = { version = "1.2.0" }
-proto_pdk = { version = "0.21.2" }                                            #, path = "../../proto/crates/pdk" }
-proto_pdk_test_utils = { version = "0.25.2" }                                 #, path = "../../proto/crates/pdk-test-utils" }
+proto_pdk = { version = "0.21.2" }
+proto_pdk_api = { version = "0.21.2" }
+proto_pdk_test_utils = { version = "0.25.2" }
 regex = { version = "1.10.5", default-features = false, features = ["std"] }
 serde = "1.0.204"
 serde_json = "1.0.120"
+serial_test = "3.1.1"
 starbase_sandbox = "0.7.0"
 tokio = { version = "1.38.1", features = ["full"] }
 toml = { version = "0.8.14", default-features = false, features = ["parse"] }
+
+# Node.js
+nodejs_package_json = "0.2.0"
 
 [profile.release]
 codegen-units = 1

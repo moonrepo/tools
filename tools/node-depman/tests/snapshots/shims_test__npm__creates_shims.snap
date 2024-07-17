@@ -1,0 +1,15 @@
+---
+source: crates/node-depman/tests/shims_test.rs
+expression: "std::fs::read_to_string(sandbox.path().join(\".proto/shims/registry.json\")).unwrap()"
+---
+{
+  "node-gyp": {
+    "alt_bin": true,
+    "parent": "npm-test"
+  },
+  "npm-test": {},
+  "npx": {
+    "alt_bin": true,
+    "parent": "npm-test"
+  }
+}
