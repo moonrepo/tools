@@ -1,0 +1,24 @@
+[package]
+name = "rust_plugin"
+version = "0.10.5"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ['cdylib']
+
+[dependencies]
+extism-pdk = { workspace = true }
+proto_pdk = { workspace = true }
+serde = { workspace = true }
+toml = { workspace = true }
+
+[dev-dependencies]
+proto_pdk_test_utils = { workspace = true }
+starbase_sandbox = { workspace = true }
+tokio = { workspace = true }
+
+[features]
+default = ["wasm"]
+wasm = []

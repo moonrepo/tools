@@ -2426,6 +2426,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "rust_plugin"
+version = "0.10.5"
+dependencies = [
+ "extism-pdk",
+ "proto_pdk",
+ "proto_pdk_test_utils",
+ "serde",
+ "starbase_sandbox",
+ "tokio",
+ "toml 0.8.14",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"

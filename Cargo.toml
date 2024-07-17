@@ -7,12 +7,13 @@ members = [
 
 [workspace.dependencies]
 extism-pdk = { version = "1.2.0" }
-proto_pdk = { version = "0.21.2" }                                           #, path = "../../proto/crates/pdk" }
-proto_pdk_test_utils = { version = "0.25.2" }                                #, path = "../../proto/crates/pdk-test-utils" }
+proto_pdk = { version = "0.21.2" }                                            #, path = "../../proto/crates/pdk" }
+proto_pdk_test_utils = { version = "0.25.2" }                                 #, path = "../../proto/crates/pdk-test-utils" }
 regex = { version = "1.10.5", default-features = false, features = ["std"] }
 serde = "1.0.204"
 starbase_sandbox = "0.7.0"
 tokio = { version = "1.38.1", features = ["full"] }
+toml = { version = "0.8.14", default-features = false, features = ["parse"] }
 
 [profile.release]
 codegen-units = 1
