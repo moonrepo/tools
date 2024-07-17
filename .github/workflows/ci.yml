@@ -47,7 +47,6 @@ jobs:
       - uses: moonrepo/setup-rust@v1
         with:
           bins: cargo-nextest
-          cache: false
       - uses: moonrepo/setup-toolchain@v0
         with:
           moon-version: latest

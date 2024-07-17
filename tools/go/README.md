@@ -12,7 +12,7 @@ This plugin is built-in to proto, but if you want to override it with an explici
 
 ```toml
 [plugins]
-go = "source:https://github.com/moonrepo/go-plugin/releases/download/vX.Y.Z/go_plugin.wasm"
+go = "https://github.com/moonrepo/go-plugin/releases/download/vX.Y.Z/go_plugin.wasm"
 ```
 
 ## Configuration

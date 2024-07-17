@@ -12,7 +12,7 @@ This plugin is built-in to proto, but if you want to override it with an explici
 
 ```toml
 [plugins]
-python = "source:https://github.com/moonrepo/python-plugin/releases/download/vX.Y.Z/python_plugin.wasm"
+python = "https://github.com/moonrepo/python-plugin/releases/download/vX.Y.Z/python_plugin.wasm"
 ```
 
 ## Configuration
