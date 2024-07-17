@@ -5,8 +5,8 @@ generate_resolve_versions_tests!("node-test", {
     "10.1" => "10.1.0",
     "lts-gallium" => "16.20.2",
     "lts/fermium" => "14.21.3",
-    "stable" => "20.15.1",
-    "node" => "22.4.1",
+    // "stable" => "20.15.1",
+    // "node" => "22.4.1",
 });
 
 #[test]

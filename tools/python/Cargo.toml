@@ -1,5 +1,5 @@
 [package]
-name = "python_plugin"
+name = "python_tool"
 version = "0.10.4"
 edition = "2021"
 license = "MIT"

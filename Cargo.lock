@@ -214,7 +214,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
 
 [[package]]
-name = "bun_plugin"
+name = "bun_tool"
 version = "0.12.2"
 dependencies = [
  "extism-pdk",
@@ -660,7 +660,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deno_plugin"
+name = "deno_tool"
 version = "0.11.2"
 dependencies = [
  "extism-pdk",
@@ -1200,7 +1200,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "go_plugin"
+name = "go_tool"
 version = "0.11.3"
 dependencies = [
  "extism-pdk",
@@ -1791,7 +1791,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "node_depman_plugin"
+name = "node_depman_tool"
 version = "0.11.5"
 dependencies = [
  "extism-pdk",
@@ -1808,7 +1808,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "node_plugin"
+name = "node_tool"
 version = "0.11.5"
 dependencies = [
  "extism-pdk",
@@ -2232,7 +2232,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "python_plugin"
+name = "python_tool"
 version = "0.10.4"
 dependencies = [
  "extism-pdk",
@@ -2519,7 +2519,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust_plugin"
+name = "rust_tool"
 version = "0.10.5"
 dependencies = [
  "extism-pdk",
@@ -2659,7 +2659,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "schema_plugin"
+name = "schema_tool"
 version = "0.14.0"
 dependencies = [
  "extism-pdk",

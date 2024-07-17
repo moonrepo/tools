@@ -1,5 +1,5 @@
 [package]
-name = "go_plugin"
+name = "go_tool"
 version = "0.11.3"
 edition = "2021"
 license = "MIT"

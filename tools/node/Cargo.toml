@@ -1,5 +1,5 @@
 [package]
-name = "node_plugin"
+name = "node_tool"
 version = "0.11.5"
 edition = "2021"
 license = "MIT"
