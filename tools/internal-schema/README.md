@@ -8,7 +8,7 @@ This plugin is built-in to proto, but if you want to override it with an explici
 
 ```toml
 [plugins]
-internal-schema = "https://github.com/moonrepo/schema-plugin/releases/download/vX.Y.Z/schema_plugin.wasm"
+internal-schema = "https://github.com/moonrepo/schema-plugin/releases/download/vX.Y.Z/schema_tool.wasm"
 ```
 
 ## Configuration

@@ -12,7 +12,7 @@ This plugin is built-in to proto, but if you want to override it with an explici
 
 ```toml
 [plugins]
-npm|pnpm|yarn = "https://github.com/moonrepo/node-plugin/releases/download/vX.Y.Z/node_depman_plugin.wasm"
+npm|pnpm|yarn = "https://github.com/moonrepo/node-plugin/releases/download/vX.Y.Z/node_depman_tool.wasm"
 ```
 
 ## Configuration

@@ -1,5 +1,5 @@
 [package]
-name = "schema_plugin"
+name = "schema_tool"
 version = "0.14.0"
 edition = "2021"
 license = "MIT"
