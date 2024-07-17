@@ -2,5 +2,7 @@
 bun-test = "source:target/wasm32-wasi/debug/bun_plugin.wasm"
 deno-test = "source:target/wasm32-wasi/debug/deno_plugin.wasm"
 go-test = "source:target/wasm32-wasi/debug/go_plugin.wasm"
+moon-test = "source:https://raw.githubusercontent.com/moonrepo/moon/master/proto-plugin.toml"
 python-test = "source:target/wasm32-wasi/debug/python_plugin.wasm"
 rust-test = "source:target/wasm32-wasi/debug/rust_plugin.wasm"
+# internal-schema = "source:target/wasm32-wasi/debug/schema_plugin.wasm"

@@ -1,0 +1,23 @@
+bin = "moon-test"
+name = "moon-test"
+type = "cli"
+
+[platform.linux]
+archive-prefix = "moon-linux-{arch}-{version}"
+bin-path = "lin/moon"
+download-file = "moon-{arch}-unknown-linux-gnu"
+
+[platform.macos]
+bin-path = "mac/moon"
+checksum-file = "SHASUM256.txt"
+download-file = "moon-{arch}-apple-darwin"
+
+[platform.windows]
+bin-path = "win/moon.exe"
+download-file = "moon-{arch}-pc-windows-msvc.exe"
+
+[install]
+download-url = "https://github.com/moonrepo/moon/releases/download/v{version}/{download_file}"
+
+[resolve]
+git-url = "https://github.com/moonrepo/moon"

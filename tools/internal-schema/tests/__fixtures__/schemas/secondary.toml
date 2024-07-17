@@ -1,0 +1,29 @@
+bin = "moon-test"
+name = "moon-test"
+type = "cli"
+
+[platform.linux]
+download-file = "moon-{arch}-unknown-linux-{libc}"
+
+[platform.macos]
+download-file = "moon-{arch}-apple-darwin"
+
+[platform.windows]
+download-file = "moon-{arch}-pc-windows-msvc.exe"
+
+[install.secondary.foo]
+exe-path = "bin/foo"
+
+[install.secondary.bar]
+exe-path = "bin/bar"
+no-bin = true
+shim-env-vars = { "BAR" = "bar" }
+
+[install.secondary.baz]
+exe-path = "bin/baz"
+exe-link-path = "bin/baz-link"
+no-shim = true
+
+[install.secondary.qux]
+exe-path = "bin/qux.js"
+parent-exe-name = "node"

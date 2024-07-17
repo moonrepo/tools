@@ -1,0 +1,15 @@
+bin = "moon-test"
+name = "moon-test"
+type = "cli"
+
+[platform.linux]
+bin-path = "lin/moon"
+
+[platform.macos]
+bin-path = "mac/moon"
+
+[platform.windows]
+bin-path = "win/moon.exe"
+
+[install.primary]
+exe-path = "bin/moon"

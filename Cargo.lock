@@ -2116,6 +2116,7 @@ dependencies = [
  "serde",
  "serde_json",
  "starbase_sandbox",
+ "toml 0.8.14",
  "warpgate",
 ]
 
@@ -2554,6 +2555,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fbc91545643bcf3a0bbb6569265615222618bdf33ce4ffbbd13c4bbd4c093534"
 dependencies = [
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "schema_plugin"
+version = "0.14.0"
+dependencies = [
+ "extism-pdk",
+ "proto_pdk",
+ "proto_pdk_test_utils",
+ "regex",
+ "serde",
+ "serde_json",
+ "starbase_sandbox",
+ "tokio",
 ]
 
 [[package]]

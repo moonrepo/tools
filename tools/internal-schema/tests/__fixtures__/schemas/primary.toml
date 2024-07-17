@@ -1,0 +1,17 @@
+bin = "moon-test"
+name = "moon-test"
+type = "cli"
+
+[platform.linux]
+download-file = "moon-{arch}-unknown-linux-{libc}"
+
+[platform.macos]
+download-file = "moon-{arch}-apple-darwin"
+
+[platform.windows]
+download-file = "moon-{arch}-pc-windows-msvc.exe"
+
+[install.primary]
+exe-path = "bin/moon"
+no-shim = true
+shim-before-args = ["-v"]
