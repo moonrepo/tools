@@ -1,13 +1,19 @@
 // Importing proto_pdk crashes Windows because it contains WASM code
 #[cfg(not(windows))]
 mod node_hooks {
-    use node_common::NodePluginConfig;
     use proto_pdk::InstallHook;
     use proto_pdk_test_utils::*;
     use serial_test::serial;
     use std::collections::HashSet;
     use std::env;
     use std::path::PathBuf;
+
+    #[derive(Debug, Default, serde::Deserialize, serde::Serialize)]
+    #[serde(default, deny_unknown_fields, rename_all = "kebab-case")]
+    pub struct NodePluginConfig {
+        pub bundled_npm: bool,
+        pub dist_url: String,
+    }
 
     fn set_vars(path: PathBuf) {
         env::set_var("PROTO_HOME", path.to_string_lossy().to_string());

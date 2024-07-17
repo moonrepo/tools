@@ -31,10 +31,8 @@ pub fn detect_version_files(_: ()) -> FnResult<Json<DetectVersionOutput>> {
 
 #[plugin_fn]
 pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVersionsOutput>> {
-    let tags = load_git_tags("https://github.com/denoland/deno")?;
-
-    let tags = tags
-        .iter()
+    let tags = load_git_tags("https://github.com/denoland/deno")?
+        .into_iter()
         .filter_map(|tag| tag.strip_prefix('v').map(|tag| tag.to_owned()))
         .collect::<Vec<_>>();
 

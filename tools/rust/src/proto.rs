@@ -37,9 +37,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
 
 #[plugin_fn]
 pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVersionsOutput>> {
-    let tags = load_git_tags("https://github.com/rust-lang/rust")?;
-
-    let tags = tags
+    let tags = load_git_tags("https://github.com/rust-lang/rust")?
         .into_iter()
         .filter_map(|tag| {
             // Filter out old versions

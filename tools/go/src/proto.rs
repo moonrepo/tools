@@ -32,9 +32,7 @@ pub fn detect_version_files(_: ()) -> FnResult<Json<DetectVersionOutput>> {
 
 #[plugin_fn]
 pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVersionsOutput>> {
-    let tags = load_git_tags("https://github.com/golang/go")?;
-
-    let tags = tags
+    let tags = load_git_tags("https://github.com/golang/go")?
         .iter()
         .filter_map(|tag| tag.strip_prefix("go"))
         .map(from_go_version)
@@ -50,9 +48,9 @@ pub fn parse_version_file(
     let mut version = None;
 
     if input.file == "go.mod" || input.file == "go.work" {
-        for line in input.content.split('\n') {
+        for line in input.content.lines() {
             if let Some(v) = line.strip_prefix("go ") {
-                let range = format!("^{}", from_go_version(v));
+                let range = format!("^{}", from_go_version(v.trim()));
 
                 version = Some(UnresolvedVersionSpec::parse(range)?);
                 break;

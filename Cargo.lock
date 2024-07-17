@@ -1786,7 +1786,6 @@ dependencies = [
 name = "node_common"
 version = "0.1.0"
 dependencies = [
- "proto_pdk_api",
  "serde",
 ]
 

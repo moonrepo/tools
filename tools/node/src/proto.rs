@@ -1,5 +1,6 @@
+use crate::config::NodePluginConfig;
 use extism_pdk::*;
-use node_common::{NodeDistLTS, NodeDistVersion, NodePluginConfig, VoltaField};
+use node_common::{NodeDistLTS, NodeDistVersion, VoltaField};
 use nodejs_package_json::PackageJson;
 use proto_pdk::*;
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Migrated to a new repository: https://github.com/moonrepo/tools
+
 ## 0.14.0
 
 #### 🚀 Updates

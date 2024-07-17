@@ -24,10 +24,8 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
 
 #[plugin_fn]
 pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVersionsOutput>> {
-    let tags = load_git_tags("https://github.com/oven-sh/bun")?;
-
-    let tags = tags
-        .iter()
+    let tags = load_git_tags("https://github.com/oven-sh/bun")?
+        .into_iter()
         .filter_map(|tag| tag.strip_prefix("bun-v").map(|tag| tag.to_owned()))
         .collect::<Vec<_>>();
 

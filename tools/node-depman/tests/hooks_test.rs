@@ -1,8 +1,13 @@
-use node_common::NodeDepmanPluginConfig;
 use proto_pdk_api::RunHook;
 use proto_pdk_test_utils::*;
 use std::collections::HashMap;
 use std::path::PathBuf;
+
+#[derive(Debug, Default, serde::Deserialize, serde::Serialize)]
+#[serde(default, deny_unknown_fields, rename_all = "kebab-case")]
+pub struct NodeDepmanPluginConfig {
+    pub shared_globals_dir: bool,
+}
 
 mod pre_run {
     use super::*;

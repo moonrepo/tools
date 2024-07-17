@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Migrated to a new repository: https://github.com/moonrepo/tools
+
+#### 🐞 Fixes
+
+- Fixed `go.mod`/`go.work` version detection/parsing on Windows.
+
 ## 0.11.3
 
 #### 🚀 Updates
