@@ -2,3 +2,4 @@
 bun-test = "source:target/wasm32-wasi/debug/bun_plugin.wasm"
 deno-test = "source:target/wasm32-wasi/debug/deno_plugin.wasm"
 go-test = "source:target/wasm32-wasi/debug/go_plugin.wasm"
+python-test = "source:target/wasm32-wasi/debug/python_plugin.wasm"
