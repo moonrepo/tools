@@ -1162,6 +1162,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "go_plugin"
+version = "0.11.3"
+dependencies = [
+ "extism-pdk",
+ "proto_pdk",
+ "proto_pdk_test_utils",
+ "serde",
+ "starbase_sandbox",
+ "tokio",
+]
+
+[[package]]
 name = "h2"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
