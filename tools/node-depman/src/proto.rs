@@ -364,6 +364,7 @@ pub fn locate_executables(
     let config = get_tool_config::<NodeDepmanPluginConfig>()?;
 
     if config.shared_globals_dir {
+        globals_lookup_dirs.clear();
         globals_lookup_dirs.push("$PROTO_HOME/tools/node/globals/bin".into());
     }
 

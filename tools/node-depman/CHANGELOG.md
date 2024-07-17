@@ -6,6 +6,10 @@
 
 - Migrated to a new repository: https://github.com/moonrepo/tools
 
+#### 🐞 Fixes
+
+- Fixed the shared globals directory not resolving correctly.
+
 ## 0.11.5
 
 #### 🐞 Fixes
