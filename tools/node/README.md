@@ -12,7 +12,7 @@ This plugin is built-in to proto, but if you want to override it with an explici
 
 ```toml
 [plugins]
-node = "https://github.com/moonrepo/node-plugin/releases/download/vX.Y.Z/node_tool.wasm"
+node = "https://github.com/moonrepo/tools/releases/download/node_tool-vX.Y.Z/node_tool.wasm"
 ```
 
 ## Configuration

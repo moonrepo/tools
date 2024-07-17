@@ -12,7 +12,7 @@ This plugin is built-in to proto, but if you want to override it with an explici
 
 ```toml
 [plugins]
-rust = "https://github.com/moonrepo/rust-plugin/releases/download/vX.Y.Z/rust_tool.wasm"
+rust = "https://github.com/moonrepo/tools/releases/download/rust_tool-vX.Y.Z/rust_tool.wasm"
 ```
 
 ## Configuration
