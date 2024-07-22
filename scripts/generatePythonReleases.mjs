@@ -129,7 +129,8 @@ function processAssets(assets, releaseName, optLevel) {
     if (sha256) {
       if (
         typeof data[version][triple].download === "string" &&
-        data[version][triple].download.includes(optLevel)
+        data[version][triple].download.includes(optLevel) &&
+        !data[version][triple].checksum
       ) {
         data[version][triple].checksum = asset.browser_download_url;
       }
