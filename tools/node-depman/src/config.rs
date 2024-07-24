@@ -1,21 +1,17 @@
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 #[serde(default, deny_unknown_fields, rename_all = "kebab-case")]
-pub struct NodePluginConfig {
-    pub bundled_npm: bool,
+pub struct NodeDepmanPluginConfig {
     pub dist_url: String,
+    pub shared_globals_dir: bool,
 }
 
-impl Default for NodePluginConfig {
+impl Default for NodeDepmanPluginConfig {
     fn default() -> Self {
         Self {
-            bundled_npm: false,
-            dist_url: "https://nodejs.org/download/release/v{version}/{file}".into(),
+            dist_url:
+                "https://registry.npmjs.org/{package}/-/{package_without_scope}-{version}.tgz"
+                    .into(),
+            shared_globals_dir: false,
         }
     }
-}
-
-#[derive(Debug, Default, serde::Deserialize, serde::Serialize)]
-#[serde(default, deny_unknown_fields, rename_all = "kebab-case")]
-pub struct NodeDepmanPluginConfig {
-    pub shared_globals_dir: bool,
 }

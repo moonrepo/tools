@@ -267,11 +267,16 @@ pub fn download_prebuilt(
         &package_name
     };
 
+    let host = get_tool_config::<NodeDepmanPluginConfig>()?.dist_url;
+    let filename = format!("{package_without_scope}-{version}.tgz");
+
     Ok(Json(DownloadPrebuiltOutput {
         archive_prefix: Some(get_archive_prefix(&manager, version)),
-        download_url: format!(
-            "https://registry.npmjs.org/{package_name}/-/{package_without_scope}-{version}.tgz",
-        ),
+        download_url: host
+            .replace("{package}", &package_name)
+            .replace("{package_without_scope}", package_without_scope)
+            .replace("{version}", &version.to_string())
+            .replace("{file}", &filename),
         ..DownloadPrebuiltOutput::default()
     }))
 }
