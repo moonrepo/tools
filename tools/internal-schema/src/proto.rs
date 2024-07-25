@@ -116,7 +116,7 @@ pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVers
 
         for tag in load_git_tags(repository)? {
             if let Some(cap) = pattern.captures(&tag) {
-                versions.insert(VersionSpec::parse(&create_version(cap))?);
+                versions.insert(VersionSpec::parse(create_version(cap))?);
             }
         }
     }
@@ -130,13 +130,13 @@ pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVers
             match row {
                 JsonValue::String(v) => {
                     if let Some(cap) = pattern.captures(&v) {
-                        versions.insert(VersionSpec::parse(&create_version(cap))?);
+                        versions.insert(VersionSpec::parse(create_version(cap))?);
                     }
                 }
                 JsonValue::Object(o) => {
                     if let Some(JsonValue::String(v)) = o.get(version_key) {
                         if let Some(cap) = pattern.captures(v) {
-                            versions.insert(VersionSpec::parse(&create_version(cap))?);
+                            versions.insert(VersionSpec::parse(create_version(cap))?);
                         }
                     }
                 }
