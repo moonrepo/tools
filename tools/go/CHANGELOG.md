@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 💥 Breaking
+
+- Changed the `gobin` setting to `false` by default.
+
 ## 0.11.4
 
 #### 🚀 Updates

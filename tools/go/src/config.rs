@@ -9,7 +9,7 @@ impl Default for GoPluginConfig {
     fn default() -> Self {
         Self {
             dist_url: "https://dl.google.com/go/{file}".into(),
-            gobin: true,
+            gobin: false,
         }
     }
 }
