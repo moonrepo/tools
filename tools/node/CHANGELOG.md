@@ -4,7 +4,7 @@
 
 #### 🚀 Updates
 
-- Updated canary to find an applicable nightly based on the current os/arch combination.
+- Updated canary to find an applicable release based on the current os/arch combination.
 
 ## 0.11.6
 
