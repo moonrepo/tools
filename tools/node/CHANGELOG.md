@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Updated canary to find an applicable release based on the current os/arch combination.
+
 ## 0.11.6
 
 #### 🚀 Updates

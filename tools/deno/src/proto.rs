@@ -63,15 +63,17 @@ pub fn download_prebuilt(
         _ => unreachable!(),
     };
 
-    let filename = match env.os {
-        HostOS::Linux => format!("deno-{arch}-unknown-linux-gnu.zip"),
-        HostOS::MacOS => format!("deno-{arch}-apple-darwin.zip"),
-        HostOS::Windows => format!("deno-{arch}-pc-windows-msvc.zip"),
+    let target = match env.os {
+        HostOS::Linux => format!("{arch}-unknown-linux-gnu"),
+        HostOS::MacOS => format!("{arch}-apple-darwin"),
+        HostOS::Windows => format!("{arch}-pc-windows-msvc"),
         _ => unreachable!(),
     };
 
+    let filename = format!("deno-{target}.zip");
+
     let download_url = if version.is_canary() {
-        let hash = fetch_url_text("https://dl.deno.land/canary-latest.txt")?;
+        let hash = fetch_url_text(format!("https://dl.deno.land/canary-{target}-latest.txt"))?;
 
         format!("https://dl.deno.land/canary/{}/{filename}", hash.trim())
     } else if version.is_latest() {
