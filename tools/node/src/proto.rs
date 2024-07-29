@@ -171,7 +171,7 @@ fn map_os_arch(
             // Arm64 support was added after v16, but M1/M2 machines can
             // run x64 binaries via Rosetta. This is a compat hack!
             if host_arch == HostArch::Arm64 && parsed_version.major < 16 {
-                format!("darwin-x64")
+                "darwin-x64".into()
             } else {
                 format!("darwin-{arch}")
             }
