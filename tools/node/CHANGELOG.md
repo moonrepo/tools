@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🐞 Fixes
+
+- Fix macOS not resolving nightly releases correctly.
+
 ## 0.11.7
 
 #### 🚀 Updates
