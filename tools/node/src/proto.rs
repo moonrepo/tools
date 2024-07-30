@@ -135,54 +135,6 @@ pub fn resolve_version(
     Ok(Json(output))
 }
 
-fn map_arch(host_os: HostOS, host_arch: HostArch) -> Result<String, PluginError> {
-    let arch = match host_arch {
-        HostArch::Arm => "armv7l".into(),
-        HostArch::Arm64 => "arm64".into(),
-        HostArch::Powerpc64 => {
-            if host_os == HostOS::Linux {
-                "ppc64le".into()
-            } else {
-                "ppc64".into()
-            }
-        }
-        HostArch::S390x => "s390x".into(),
-        HostArch::X64 => "x64".into(),
-        HostArch::X86 => "x86".into(),
-        _ => unreachable!(),
-    };
-
-    Ok(arch)
-}
-
-fn map_os_arch(
-    host_os: HostOS,
-    host_arch: HostArch,
-    version: &VersionSpec,
-) -> Result<String, PluginError> {
-    let arch = map_arch(host_os, host_arch)?;
-
-    let os = match host_os {
-        HostOS::Linux => format!("linux-{arch}"),
-        HostOS::MacOS => {
-            let m1_compat_version = Version::new(20, 0, 0);
-            let parsed_version = version.as_version().unwrap_or(&m1_compat_version);
-
-            // Arm64 support was added after v16, but M1/M2 machines can
-            // run x64 binaries via Rosetta. This is a compat hack!
-            if host_arch == HostArch::Arm64 && parsed_version.major < 16 {
-                "darwin-x64".into()
-            } else {
-                format!("darwin-{arch}")
-            }
-        }
-        HostOS::Windows => format!("win-{arch}"),
-        _ => unreachable!(),
-    };
-
-    Ok(os)
-}
-
 #[plugin_fn]
 pub fn download_prebuilt(
     Json(input): Json<DownloadPrebuiltInput>,
@@ -201,22 +153,61 @@ pub fn download_prebuilt(
 
     let mut version = input.context.version;
     let mut host = get_tool_config::<NodePluginConfig>()?.dist_url;
-    let suffix = map_os_arch(env.os, env.arch, &version)?;
+
+    let arch: String = match env.arch {
+        HostArch::Arm => "armv7l".into(),
+        HostArch::Arm64 => "arm64".into(),
+        HostArch::Powerpc64 => {
+            if env.os == HostOS::Linux {
+                "ppc64le".into()
+            } else {
+                "ppc64".into()
+            }
+        }
+        HostArch::S390x => "s390x".into(),
+        HostArch::X64 => "x64".into(),
+        HostArch::X86 => "x86".into(),
+        _ => unreachable!(),
+    };
 
     // When canary, extract the latest version from the index
     if version.is_canary() {
         let response: Vec<NodeDistVersion> =
             fetch_url("https://nodejs.org/download/nightly/index.json")?;
+        let file_to_match = match env.os {
+            HostOS::Linux => format!("linux-{arch}"),
+            HostOS::MacOS => format!("osx-{arch}-tar"),
+            HostOS::Windows => format!("win-{arch}-zip"),
+            _ => unreachable!(),
+        };
+
         let entry = response
             .iter()
-            .find(|row| row.files.iter().any(|file| file.starts_with(&suffix)))
+            .find(|row| row.files.iter().any(|file| file == &file_to_match))
             .unwrap_or(&response[0]);
 
         host = host.replace("/release/", "/nightly/");
         version = VersionSpec::parse(&entry.version)?;
     }
 
-    let prefix = format!("node-v{version}-{suffix}");
+    let prefix = match env.os {
+        HostOS::Linux => format!("node-v{version}-linux-{arch}"),
+        HostOS::MacOS => {
+            let m1_compat_version = Version::new(20, 0, 0);
+            let parsed_version = version.as_version().unwrap_or(&m1_compat_version);
+
+            // Arm64 support was added after v16, but M1/M2 machines can
+            // run x64 binaries via Rosetta. This is a compat hack!
+            if env.arch == HostArch::Arm64 && parsed_version.major < 16 {
+                "darwin-x64".into()
+            } else {
+                format!("node-v{version}-darwin-{arch}")
+            }
+        }
+        HostOS::Windows => format!("node-v{version}-win-{arch}"),
+        _ => unreachable!(),
+    };
+
     let filename = if env.os == HostOS::Windows {
         format!("{prefix}.zip")
     } else {
