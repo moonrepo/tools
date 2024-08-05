@@ -1,8 +1,11 @@
 [workspace]
 resolver = "2"
-members = ["crates/*", "tools/*"]
+members = ["crates/*", "tools/*", "toolchains/*"]
 
 [workspace.dependencies]
+moon_pdk = { path = "../moon/crates/pdk" }
+moon_pdk_api = { path = "../moon/crates/pdk-api" }
+
 # Common
 extism-pdk = { version = "1.3.0" }
 proto_pdk = { version = "0.25.5" } # , path = "../proto/crates/pdk" }
