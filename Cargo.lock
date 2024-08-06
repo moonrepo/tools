@@ -2283,6 +2283,7 @@ dependencies = [
  "extism-pdk",
  "moon_pdk",
  "node_tool",
+ "schematic",
  "serde",
 ]
 
