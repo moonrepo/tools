@@ -1,0 +1,24 @@
+[package]
+name = "proto_tool"
+version = "0.0.1"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[package.metadata.release]
+pre-release-replacements = [
+	{ file = "./CHANGELOG.md", search = "Unreleased", replace = "{{version}}" },
+]
+
+[lib]
+crate-type = ['cdylib']
+test = false
+
+[dependencies]
+extism-pdk = { workspace = true }
+proto_pdk = { workspace = true }
+serde = { workspace = true }
+
+[features]
+default = ["wasm"]
+wasm = []
