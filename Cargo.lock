@@ -2302,6 +2302,7 @@ name = "proto_pdk_api"
 version = "0.22.0"
 dependencies = [
  "rustc-hash 2.0.0",
+ "schematic",
  "semver",
  "serde",
  "serde_json",
@@ -2564,7 +2565,6 @@ dependencies = [
  "base64 0.22.1",
  "bytes",
  "encoding_rs",
- "futures-channel",
  "futures-core",
  "futures-util",
  "h2",
@@ -2801,7 +2801,6 @@ dependencies = [
  "garde",
  "indexmap 2.2.6",
  "miette",
- "reqwest",
  "schematic_macros",
  "schematic_types",
  "serde",
