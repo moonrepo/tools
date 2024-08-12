@@ -47,6 +47,12 @@ pub fn download_prebuilt(
     let version = input.context.version;
     let arch = env.arch.to_rust_arch();
 
+    if version.is_canary() {
+        return Err(plugin_err!(PluginError::UnsupportedCanary {
+            tool: "proto".into()
+        }));
+    }
+
     let target = match env.os {
         HostOS::Linux => format!("{arch}-unknown-linux-{}", env.libc),
         HostOS::MacOS => format!("{arch}-apple-darwin"),
@@ -58,13 +64,7 @@ pub fn download_prebuilt(
 
     let download_file = format!("{target_name}.{target_ext}");
     let checksum_file = format!("{download_file}.sha256");
-
-    let tag = if version.is_canary() {
-        "canary".into()
-    } else {
-        format!("v{version}")
-    };
-    let base_url = format!("https://github.com/moonrepo/proto/releases/download/{tag}");
+    let base_url = format!("https://github.com/moonrepo/proto/releases/download/v{version}");
 
     Ok(Json(DownloadPrebuiltOutput {
         archive_prefix: Some(target_name),
