@@ -12,7 +12,6 @@ pre-release-replacements = [
 
 [lib]
 crate-type = ['cdylib']
-test = false
 
 [dependencies]
 extism-pdk = { workspace = true }
