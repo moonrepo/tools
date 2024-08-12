@@ -53,15 +53,24 @@ pub fn download_prebuilt(
         HostOS::Windows => format!("{arch}-pc-windows-msvc"),
         _ => unreachable!(),
     };
-    let target_file = format!("proto_cli-{target}");
-    let target_ext = if cfg!(windows) { "zip" } else { "tar.xz" };
+    let target_name = format!("proto_cli-{target}");
+    let target_ext = if env.os.is_windows() { "zip" } else { "tar.xz" };
 
-    let download_file = format!("{target_file}.{target_ext}");
-    let download_url =
-        format!("https://github.com/moonrepo/proto/releases/download/v{version}/{download_file}");
+    let download_file = format!("{target_name}.{target_ext}");
+    let checksum_file = format!("{download_file}.sha256");
+
+    let tag = if version.is_canary() {
+        "canary".into()
+    } else {
+        format!("v{version}")
+    };
+    let base_url = format!("https://github.com/moonrepo/proto/releases/download/{tag}");
 
     Ok(Json(DownloadPrebuiltOutput {
-        download_url,
+        archive_prefix: Some(target_name),
+        checksum_url: Some(format!("{base_url}/{checksum_file}")),
+        checksum_name: Some(checksum_file),
+        download_url: format!("{base_url}/{download_file}"),
         download_name: Some(download_file),
         ..DownloadPrebuiltOutput::default()
     }))
