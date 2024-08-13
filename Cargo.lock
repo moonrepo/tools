@@ -2222,6 +2222,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "proto_tool"
+version = "0.0.1"
+dependencies = [
+ "extism-pdk",
+ "proto_pdk",
+ "serde",
+]
+
+[[package]]
 name = "psm"
 version = "0.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
