@@ -1,13 +1,13 @@
 [workspace]
 resolver = "2"
-members = ["crates/*", "tools/*"]
+members = ["crates/*", "tools/bun"]
 
 [workspace.dependencies]
 # Common
 extism-pdk = { version = "1.2.1" }
-proto_pdk = { version = "0.22.0", path = "../proto/crates/pdk" }
-proto_pdk_api = { version = "0.22.0", path = "../proto/crates/pdk-api" }
-proto_pdk_test_utils = { version = "0.26.0", path = "../proto/crates/pdk-test-utils" }
+proto_pdk = { version = "0.23.0" }
+proto_pdk_api = { version = "0.23.0" }
+proto_pdk_test_utils = { version = "0.27.0" }
 regex = { version = "1.10.6", default-features = false, features = ["std"] }
 schematic = { version = "0.17.2", default-features = false, features = [
 	"schema",

@@ -8,21 +8,25 @@ mod canary {
     generate_download_install_tests!("bun-test", "canary");
 }
 
-#[test]
-fn supports_linux_arm64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_arm64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::Linux, HostArch::Arm64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::Linux, HostArch::Arm64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("1.2.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("1.2.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("bun-linux-aarch64".into()),
             checksum_url: Some(
@@ -37,20 +41,24 @@ fn supports_linux_arm64() {
     );
 }
 
-#[test]
-fn supports_linux_x64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_x64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::Linux, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::Linux, HostArch::X64);
+        })
+        .await;
 
-    let result = plugin.download_prebuilt(DownloadPrebuiltInput {
-        context: ToolContext {
-            version: VersionSpec::parse("1.2.0").unwrap(),
+    let result = plugin
+        .download_prebuilt(DownloadPrebuiltInput {
+            context: ToolContext {
+                version: VersionSpec::parse("1.2.0").unwrap(),
+                ..Default::default()
+            },
             ..Default::default()
-        },
-        ..Default::default()
-    });
+        })
+        .await;
 
     assert_eq!(
         result.checksum_url,
@@ -67,21 +75,25 @@ fn supports_linux_x64() {
     );
 }
 
-#[test]
-fn supports_macos_arm64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_macos_arm64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::MacOS, HostArch::Arm64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::MacOS, HostArch::Arm64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("1.2.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("1.2.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("bun-darwin-aarch64".into()),
             checksum_url: Some(
@@ -96,21 +108,25 @@ fn supports_macos_arm64() {
     );
 }
 
-#[test]
-fn supports_macos_x64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_macos_x64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::MacOS, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::MacOS, HostArch::X64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("1.2.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("1.2.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("bun-darwin-x64".into()),
             checksum_url: Some(
@@ -125,21 +141,25 @@ fn supports_macos_x64() {
     );
 }
 
-#[test]
-fn supports_windows_x64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_windows_x64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::Windows, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::Windows, HostArch::X64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("1.2.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("1.2.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("bun-windows-x64".into()),
             checksum_url: Some(
@@ -154,12 +174,14 @@ fn supports_windows_x64() {
     );
 }
 
-#[test]
-fn locates_unix_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_unix_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::Linux, HostArch::Arm64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::Linux, HostArch::Arm64);
+        })
+        .await;
 
     assert_eq!(
         plugin
@@ -169,6 +191,7 @@ fn locates_unix_bin() {
                     ..Default::default()
                 }
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
@@ -176,12 +199,14 @@ fn locates_unix_bin() {
     );
 }
 
-#[test]
-fn locates_windows_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_windows_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::Windows, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::Windows, HostArch::X64);
+        })
+        .await;
 
     assert_eq!(
         plugin
@@ -191,6 +216,7 @@ fn locates_windows_bin() {
                     ..Default::default()
                 }
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
