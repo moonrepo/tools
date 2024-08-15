@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/*", "tools/internal-schema"]
+members = ["crates/*", "tools/node"]
 
 [workspace.dependencies]
 # Common

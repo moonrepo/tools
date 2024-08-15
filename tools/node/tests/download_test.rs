@@ -10,21 +10,25 @@ mod canary {
     generate_download_install_tests!("node-test", "canary");
 }
 
-#[test]
-fn supports_linux_arm64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_arm64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::Linux, HostArch::Arm64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::Linux, HostArch::Arm64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-linux-arm64".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -36,21 +40,25 @@ fn supports_linux_arm64() {
     );
 }
 
-#[test]
-fn supports_linux_arm() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_arm() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::Linux, HostArch::Arm);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::Linux, HostArch::Arm);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-linux-armv7l".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -63,21 +71,25 @@ fn supports_linux_arm() {
     );
 }
 
-#[test]
-fn supports_linux_x64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_x64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::Linux, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::Linux, HostArch::X64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-linux-x64".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -89,21 +101,25 @@ fn supports_linux_x64() {
     );
 }
 
-#[test]
-fn supports_linux_s390x() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_s390x() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::Linux, HostArch::S390x);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::Linux, HostArch::S390x);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-linux-s390x".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -115,21 +131,25 @@ fn supports_linux_s390x() {
     );
 }
 
-#[test]
-fn supports_linux_ppc64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_ppc64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::Linux, HostArch::Powerpc64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::Linux, HostArch::Powerpc64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-linux-ppc64le".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -142,21 +162,25 @@ fn supports_linux_ppc64() {
     );
 }
 
-#[test]
-fn supports_macos_arm64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_macos_arm64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::MacOS, HostArch::Arm64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::MacOS, HostArch::Arm64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-darwin-arm64".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -169,21 +193,25 @@ fn supports_macos_arm64() {
     );
 }
 
-#[test]
-fn supports_macos_x64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_macos_x64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::MacOS, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::MacOS, HostArch::X64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-darwin-x64".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -195,21 +223,25 @@ fn supports_macos_x64() {
     );
 }
 
-#[test]
-fn supports_windows_arm64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_windows_arm64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::Windows, HostArch::Arm64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::Windows, HostArch::Arm64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-win-arm64".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -221,21 +253,25 @@ fn supports_windows_arm64() {
     );
 }
 
-#[test]
-fn supports_windows_x64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_windows_x64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::Windows, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::Windows, HostArch::X64);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-win-x64".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -247,21 +283,25 @@ fn supports_windows_x64() {
     );
 }
 
-#[test]
-fn supports_windows_x86() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_windows_x86() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("node-test", |config| {
-        config.host(HostOS::Windows, HostArch::X86);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::Windows, HostArch::X86);
+        })
+        .await;
 
     assert_eq!(
-        plugin.download_prebuilt(DownloadPrebuiltInput {
-            context: ToolContext {
-                version: VersionSpec::parse("20.0.0").unwrap(),
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("20.0.0").unwrap(),
+                    ..Default::default()
+                },
                 ..Default::default()
-            },
-            ..Default::default()
-        }),
+            })
+            .await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("node-v20.0.0-win-x86".into()),
             checksum_url: Some("https://nodejs.org/download/release/v20.0.0/SHASUMS256.txt".into()),
@@ -273,12 +313,14 @@ fn supports_windows_x86() {
     );
 }
 
-#[test]
-fn locates_unix_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_unix_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::Linux, HostArch::Arm64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::Linux, HostArch::Arm64);
+        })
+        .await;
 
     assert_eq!(
         plugin
@@ -288,6 +330,7 @@ fn locates_unix_bin() {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
@@ -295,12 +338,14 @@ fn locates_unix_bin() {
     );
 }
 
-#[test]
-fn locates_windows_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_windows_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("bun-test", |config| {
-        config.host(HostOS::Windows, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("bun-test", |config| {
+            config.host(HostOS::Windows, HostArch::X64);
+        })
+        .await;
 
     assert_eq!(
         plugin
@@ -310,6 +355,7 @@ fn locates_windows_bin() {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
