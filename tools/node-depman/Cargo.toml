@@ -10,7 +10,6 @@ pre-release-replacements = [
 	{ file = "./CHANGELOG.md", search = "Unreleased", replace = "{{version}}" },
 ]
 
-
 [lib]
 crate-type = ['cdylib']
 

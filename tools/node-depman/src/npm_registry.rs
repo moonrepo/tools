@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use extism_pdk::{json, Error, HttpResponse};
+use extism_pdk::{json, Error};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -17,17 +17,14 @@ pub struct RegistryResponse {
     pub versions: HashMap<String, RegistryVersion>,
 }
 
-pub fn parse_registry_response(
-    res: HttpResponse,
-    is_yarn: bool,
-) -> Result<RegistryResponse, Error> {
+pub fn parse_registry_response(res_text: String, is_yarn: bool) -> Result<RegistryResponse, Error> {
     if !is_yarn {
-        return res.json();
+        return Ok(json::from_str(&res_text)?);
     }
 
     // https://github.com/moonrepo/proto/issues/257
     let pattern = regex::bytes::Regex::new("[\u{0000}-\u{001F}]+").unwrap();
-    let body = res.body();
+    let body = res_text.as_bytes();
 
-    Ok(json::from_slice(&pattern.replace_all(&body, b""))?)
+    Ok(json::from_slice(&pattern.replace_all(body, b""))?)
 }

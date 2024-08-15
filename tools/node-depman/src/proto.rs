@@ -102,8 +102,8 @@ pub fn load_versions(Json(input): Json<LoadVersionsInput>) -> FnResult<Json<Load
     let manager = PackageManager::detect()?;
     let package_name = manager.get_package_name(&input.initial);
 
-    let mut map_output = |res: HttpResponse, is_yarn: bool| -> Result<(), Error> {
-        let res = parse_registry_response(res, is_yarn)?;
+    let mut map_output = |res_text: String, is_yarn: bool| -> Result<(), Error> {
+        let res = parse_registry_response(res_text, is_yarn)?;
 
         for item in res.versions.values() {
             output.versions.push(VersionSpec::parse(&item.version)?);
@@ -131,23 +131,14 @@ pub fn load_versions(Json(input): Json<LoadVersionsInput>) -> FnResult<Json<Load
 
     // Yarn is managed by 2 different packages, so we need to request versions from both of them!
     if manager == PackageManager::Yarn {
+        map_output(fetch_text("https://registry.npmjs.org/yarn/")?, true)?;
         map_output(
-            fetch(HttpRequest::new("https://registry.npmjs.org/yarn/"), None)?,
-            true,
-        )?;
-        map_output(
-            fetch(
-                HttpRequest::new("https://registry.npmjs.org/@yarnpkg/cli-dist/"),
-                None,
-            )?,
+            fetch_text("https://registry.npmjs.org/@yarnpkg/cli-dist/")?,
             true,
         )?;
     } else {
         map_output(
-            fetch(
-                HttpRequest::new(format!("https://registry.npmjs.org/{}/", package_name)),
-                None,
-            )?,
+            fetch_text(format!("https://registry.npmjs.org/{package_name}/"))?,
             false,
         )?;
     }
@@ -174,7 +165,7 @@ pub fn resolve_version(
                 debug!("Received the bundled alias, attempting to find a version");
 
                 let response: Vec<NodeDistVersion> =
-                    fetch_url("https://nodejs.org/download/release/index.json")?;
+                    fetch_json("https://nodejs.org/download/release/index.json")?;
                 let mut found_version = false;
 
                 // Infer from proto's environment variable

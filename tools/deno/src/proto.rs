@@ -73,11 +73,11 @@ pub fn download_prebuilt(
     let filename = format!("deno-{target}.zip");
 
     let download_url = if version.is_canary() {
-        let hash = fetch_url_text(format!("https://dl.deno.land/canary-{target}-latest.txt"))?;
+        let hash = fetch_text(format!("https://dl.deno.land/canary-{target}-latest.txt"))?;
 
         format!("https://dl.deno.land/canary/{}/{filename}", hash.trim())
     } else if version.is_latest() {
-        let tag = fetch_url_text("https://dl.deno.land/release-latest.txt")?;
+        let tag = fetch_text("https://dl.deno.land/release-latest.txt")?;
 
         format!("https://dl.deno.land/release/{}/{filename}", tag.trim())
     } else {

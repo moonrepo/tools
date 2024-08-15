@@ -42,9 +42,10 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
     Ok(Json(ToolMetadataOutput {
         name: schema.name,
         type_of: match schema.type_of {
-            SchemaType::Cli => PluginType::CLI,
+            SchemaType::CommandLine => PluginType::CommandLine,
             SchemaType::DependencyManager => PluginType::DependencyManager,
             SchemaType::Language => PluginType::Language,
+            SchemaType::VersionManager => PluginType::VersionManager,
         },
         plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
         self_upgrade_commands: schema.metadata.self_upgrade_commands,
@@ -124,7 +125,7 @@ pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVers
     else if let Some(endpoint) = schema.resolve.manifest_url {
         let pattern = regex::Regex::new(&schema.resolve.version_pattern)?;
         let version_key = &schema.resolve.manifest_version_key;
-        let response: Vec<JsonValue> = fetch_url(endpoint)?;
+        let response: Vec<JsonValue> = fetch_json(endpoint)?;
 
         for row in response {
             match row {
