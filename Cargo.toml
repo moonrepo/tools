@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/*", "tools/node-depman"]
+members = ["crates/*", "tools/python"]
 
 [workspace.dependencies]
 # Common
