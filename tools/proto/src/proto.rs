@@ -22,7 +22,13 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
 pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVersionsOutput>> {
     let tags = load_git_tags("https://github.com/moonrepo/proto")?
         .into_iter()
-        .filter_map(|tag| tag.strip_prefix('v').map(|tag| tag.to_owned()))
+        .filter_map(|tag| {
+            if tag.contains("version_spec") {
+                None
+            } else {
+                tag.strip_prefix('v').map(|tag| tag.to_owned())
+            }
+        })
         .collect::<Vec<_>>();
 
     Ok(Json(LoadVersionsOutput::from(tags)?))
@@ -82,12 +88,17 @@ pub fn locate_executables(
 ) -> FnResult<Json<LocateExecutablesOutput>> {
     let env = get_host_environment()?;
 
+    let mut primary = ExecutableConfig::new(env.os.get_exe_name("proto"));
+    primary.no_bin = true;
+    primary.no_shim = true;
+
+    let mut secondary = ExecutableConfig::new(env.os.get_exe_name("proto-shim"));
+    secondary.no_bin = true;
+    secondary.no_shim = true;
+
     Ok(Json(LocateExecutablesOutput {
-        primary: Some(ExecutableConfig::new(env.os.get_exe_name("proto"))),
-        secondary: HashMap::from_iter([(
-            "proto-shim".into(),
-            ExecutableConfig::new(env.os.get_exe_name("proto-shim")),
-        )]),
+        primary: Some(primary),
+        secondary: HashMap::from_iter([("proto-shim".into(), secondary)]),
         ..LocateExecutablesOutput::default()
     }))
 }
