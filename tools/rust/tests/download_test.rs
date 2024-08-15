@@ -3,12 +3,14 @@ use proto_pdk_test_utils::*;
 // We use a fake home directory but rustup requires a real one!
 // generate_download_install_tests!("rust-test", "1.70.0");
 
-#[test]
-fn locates_linux_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_linux_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("rust-test", |config| {
-        config.host(HostOS::Linux, HostArch::Arm64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("rust-test", |config| {
+            config.host(HostOS::Linux, HostArch::Arm64);
+        })
+        .await;
 
     assert_eq!(
         plugin
@@ -18,6 +20,7 @@ fn locates_linux_bin() {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
@@ -25,12 +28,14 @@ fn locates_linux_bin() {
     );
 }
 
-#[test]
-fn locates_macos_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_macos_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("rust-test", |config| {
-        config.host(HostOS::MacOS, HostArch::X64);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("rust-test", |config| {
+            config.host(HostOS::MacOS, HostArch::X64);
+        })
+        .await;
 
     assert_eq!(
         plugin
@@ -40,6 +45,7 @@ fn locates_macos_bin() {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
@@ -47,12 +53,14 @@ fn locates_macos_bin() {
     );
 }
 
-#[test]
-fn locates_windows_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_windows_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin_with_config("rust-test", |config| {
-        config.host(HostOS::Windows, HostArch::X86);
-    });
+    let plugin = sandbox
+        .create_plugin_with_config("rust-test", |config| {
+            config.host(HostOS::Windows, HostArch::X86);
+        })
+        .await;
 
     assert_eq!(
         plugin
@@ -62,6 +70,7 @@ fn locates_windows_bin() {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
