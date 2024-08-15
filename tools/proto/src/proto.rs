@@ -82,12 +82,17 @@ pub fn locate_executables(
 ) -> FnResult<Json<LocateExecutablesOutput>> {
     let env = get_host_environment()?;
 
+    let mut primary = ExecutableConfig::new(env.os.get_exe_name("proto"));
+    primary.no_bin = true;
+    primary.no_shim = true;
+
+    let mut secondary = ExecutableConfig::new(env.os.get_exe_name("proto-shim"));
+    secondary.no_bin = true;
+    secondary.no_shim = true;
+
     Ok(Json(LocateExecutablesOutput {
-        primary: Some(ExecutableConfig::new(env.os.get_exe_name("proto"))),
-        secondary: HashMap::from_iter([(
-            "proto-shim".into(),
-            ExecutableConfig::new(env.os.get_exe_name("proto-shim")),
-        )]),
+        primary: Some(primary),
+        secondary: HashMap::from_iter([("proto-shim".into(), secondary)]),
         ..LocateExecutablesOutput::default()
     }))
 }
