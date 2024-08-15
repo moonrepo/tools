@@ -1,17 +1,13 @@
 use proto_pdk_test_utils::*;
 
-#[test]
-fn registers_metadata() {
+#[tokio::test(flavor = "multi_thread")]
+async fn registers_metadata() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("deno-test");
+    let plugin = sandbox.create_plugin("deno-test").await;
 
-    assert_eq!(
-        plugin.register_tool(ToolMetadataInput::default()),
-        ToolMetadataOutput {
-            name: "Deno".into(),
-            plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
-            self_upgrade_commands: vec!["upgrade".into()],
-            ..ToolMetadataOutput::default()
-        }
-    );
+    let metadata = plugin.register_tool(ToolMetadataInput::default()).await;
+
+    assert_eq!(metadata.name, "Deno");
+    assert_eq!(metadata.self_upgrade_commands, vec!["upgrade"]);
+    assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
 }

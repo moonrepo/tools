@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/*", "tools/bun"]
+members = ["crates/*", "tools/deno"]
 
 [workspace.dependencies]
 # Common

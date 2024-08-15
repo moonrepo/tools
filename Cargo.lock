@@ -214,19 +214,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
 
 [[package]]
-name = "bun_tool"
-version = "0.12.3"
-dependencies = [
- "extism-pdk",
- "proto_pdk",
- "proto_pdk_test_utils",
- "schematic",
- "serde",
- "starbase_sandbox",
- "tokio",
-]
-
-[[package]]
 name = "bytemuck"
 version = "1.16.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -658,6 +645,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef552e6f588e446098f6ba40d89ac146c8c7b64aade83c051ee00bb5d2bc18d"
 dependencies = [
  "uuid",
+]
+
+[[package]]
+name = "deno_tool"
+version = "0.11.4"
+dependencies = [
+ "extism-pdk",
+ "proto_pdk",
+ "proto_pdk_test_utils",
+ "schematic",
+ "serde",
+ "starbase_sandbox",
+ "tokio",
 ]
 
 [[package]]

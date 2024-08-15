@@ -6,22 +6,22 @@ generate_resolve_versions_tests!("deno-test", {
     "1.9.2" => "1.9.2",
 });
 
-#[test]
-fn loads_versions_from_git() {
+#[tokio::test(flavor = "multi_thread")]
+async fn loads_versions_from_git() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("deno-test");
+    let plugin = sandbox.create_plugin("deno-test").await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(!output.versions.is_empty());
 }
 
-#[test]
-fn sets_latest_alias() {
+#[tokio::test(flavor = "multi_thread")]
+async fn sets_latest_alias() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("deno-test");
+    let plugin = sandbox.create_plugin("deno-test").await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(output.latest.is_some());
     assert!(output.aliases.contains_key("latest"));
