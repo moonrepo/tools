@@ -22,7 +22,13 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
 pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVersionsOutput>> {
     let tags = load_git_tags("https://github.com/moonrepo/proto")?
         .into_iter()
-        .filter_map(|tag| tag.strip_prefix('v').map(|tag| tag.to_owned()))
+        .filter_map(|tag| {
+            if tag.contains("version_spec") {
+                None
+            } else {
+                tag.strip_prefix('v').map(|tag| tag.to_owned())
+            }
+        })
         .collect::<Vec<_>>();
 
     Ok(Json(LoadVersionsOutput::from(tags)?))
