@@ -23,89 +23,108 @@ mod pre_run {
     mod npm {
         use super::*;
 
-        #[test]
-        fn does_nothing_if_not_configured() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin("npm-test");
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook::default());
+        async fn does_nothing_if_not_configured() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox.create_plugin("npm-test").await;
+
+            let result = plugin.pre_run(RunHook::default()).await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_disabled() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("npm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: false,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook::default());
+        async fn does_nothing_if_disabled() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("npm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: false,
+                    });
+                })
+                .await;
+
+            let result = plugin.pre_run(RunHook::default()).await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_enabled_but_no_args() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("npm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                ..RunHook::default()
-            });
+        async fn does_nothing_if_enabled_but_no_args() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("npm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_a_prefix_was_provided() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("npm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                passthrough_args: vec![
-                    "install".into(),
-                    "-g".into(),
-                    "typescript".into(),
-                    "--prefix".into(),
-                    "/some/thing".into(),
-                ],
-                ..RunHook::default()
-            });
+        async fn does_nothing_if_a_prefix_was_provided() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("npm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    passthrough_args: vec![
+                        "install".into(),
+                        "-g".into(),
+                        "typescript".into(),
+                        "--prefix".into(),
+                        "/some/thing".into(),
+                    ],
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn adds_env_var() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("npm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                passthrough_args: vec!["install".into(), "-g".into(), "typescript".into()],
-                ..RunHook::default()
-            });
+        async fn adds_env_var() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("npm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    passthrough_args: vec!["install".into(), "-g".into(), "typescript".into()],
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(result.args, None);
             assert_eq!(
@@ -121,20 +140,25 @@ mod pre_run {
             );
         }
 
-        #[test]
-        fn adds_env_var_with_aliases() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("npm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                passthrough_args: vec!["add".into(), "--global".into(), "typescript".into()],
-                ..RunHook::default()
-            });
+        async fn adds_env_var_with_aliases() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("npm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    passthrough_args: vec!["add".into(), "--global".into(), "typescript".into()],
+                    ..RunHook::default()
+                })
+                .await;
 
             assert!(result.env.is_some());
         }
@@ -143,89 +167,108 @@ mod pre_run {
     mod pnpm {
         use super::*;
 
-        #[test]
-        fn does_nothing_if_not_configured() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin("pnpm-test");
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook::default());
+        async fn does_nothing_if_not_configured() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox.create_plugin("pnpm-test").await;
+
+            let result = plugin.pre_run(RunHook::default()).await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_disabled() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("pnpm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: false,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook::default());
+        async fn does_nothing_if_disabled() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("pnpm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: false,
+                    });
+                })
+                .await;
+
+            let result = plugin.pre_run(RunHook::default()).await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_enabled_but_no_args() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("pnpm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                ..RunHook::default()
-            });
+        async fn does_nothing_if_enabled_but_no_args() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("pnpm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_a_dir_was_provided() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("pnpm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                passthrough_args: vec![
-                    "add".into(),
-                    "-g".into(),
-                    "typescript".into(),
-                    "--global-dir".into(),
-                    "/some/thing".into(),
-                ],
-                ..RunHook::default()
-            });
+        async fn does_nothing_if_a_dir_was_provided() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("pnpm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    passthrough_args: vec![
+                        "add".into(),
+                        "-g".into(),
+                        "typescript".into(),
+                        "--global-dir".into(),
+                        "/some/thing".into(),
+                    ],
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn adds_args() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("pnpm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                passthrough_args: vec!["add".into(), "-g".into(), "typescript".into()],
-                ..RunHook::default()
-            });
+        async fn adds_args() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("pnpm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    passthrough_args: vec!["add".into(), "-g".into(), "typescript".into()],
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(
                 result.args.as_ref().unwrap().iter().collect::<Vec<_>>(),
@@ -239,20 +282,25 @@ mod pre_run {
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn adds_args_with_aliases() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("pnpm-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                passthrough_args: vec!["remove".into(), "--global".into(), "typescript".into()],
-                ..RunHook::default()
-            });
+        async fn adds_args_with_aliases() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("pnpm-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    passthrough_args: vec!["remove".into(), "--global".into(), "typescript".into()],
+                    ..RunHook::default()
+                })
+                .await;
 
             assert!(result.args.is_some());
         }
@@ -261,89 +309,108 @@ mod pre_run {
     mod yarn {
         use super::*;
 
-        #[test]
-        fn does_nothing_if_not_configured() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin("yarn-test");
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook::default());
+        async fn does_nothing_if_not_configured() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox.create_plugin("yarn-test").await;
+
+            let result = plugin.pre_run(RunHook::default()).await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_disabled() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("yarn-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: false,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook::default());
+        async fn does_nothing_if_disabled() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("yarn-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: false,
+                    });
+                })
+                .await;
+
+            let result = plugin.pre_run(RunHook::default()).await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_enabled_but_no_args() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("yarn-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                ..RunHook::default()
-            });
+        async fn does_nothing_if_enabled_but_no_args() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("yarn-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn does_nothing_if_a_prefix_was_provided() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("yarn-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                passthrough_args: vec![
-                    "global".into(),
-                    "add".into(),
-                    "typescript".into(),
-                    "--prefix".into(),
-                    "/some/thing".into(),
-                ],
-                ..RunHook::default()
-            });
+        async fn does_nothing_if_a_prefix_was_provided() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("yarn-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    passthrough_args: vec![
+                        "global".into(),
+                        "add".into(),
+                        "typescript".into(),
+                        "--prefix".into(),
+                        "/some/thing".into(),
+                    ],
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(result.args, None);
             assert_eq!(result.env, None);
         }
 
-        #[test]
-        fn adds_env_var() {
-            let sandbox = create_empty_proto_sandbox();
-            let plugin = sandbox.create_plugin_with_config("yarn-test", |config| {
-                config.tool_config(NodeDepmanPluginConfig {
-                    shared_globals_dir: true,
-                });
-            });
+        #[tokio::test(flavor = "multi_thread")]
 
-            let result = plugin.pre_run(RunHook {
-                globals_dir: Some(create_globals_dir()),
-                passthrough_args: vec!["global".into(), "add".into(), "typescript".into()],
-                ..RunHook::default()
-            });
+        async fn adds_env_var() {
+            let sandbox = create_empty_proto_sandbox();
+            let plugin = sandbox
+                .create_plugin_with_config("yarn-test", |config| {
+                    config.tool_config(NodeDepmanPluginConfig {
+                        shared_globals_dir: true,
+                    });
+                })
+                .await;
+
+            let result = plugin
+                .pre_run(RunHook {
+                    globals_dir: Some(create_globals_dir()),
+                    passthrough_args: vec!["global".into(), "add".into(), "typescript".into()],
+                    ..RunHook::default()
+                })
+                .await;
 
             assert_eq!(result.args, None);
             assert_eq!(

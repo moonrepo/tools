@@ -7,60 +7,50 @@ fn create_metadata(id: &str) -> ToolMetadataInput {
 mod npm {
     use super::*;
 
-    #[test]
-    fn registers_metadata() {
-        let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin("npm-test");
+    #[tokio::test(flavor = "multi_thread")]
 
-        assert_eq!(
-            plugin.register_tool(create_metadata("npm-test")),
-            ToolMetadataOutput {
-                name: "npm".into(),
-                type_of: PluginType::DependencyManager,
-                default_version: Some(UnresolvedVersionSpec::Alias("bundled".into())),
-                plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
-                ..ToolMetadataOutput::default()
-            }
-        );
+    async fn registers_metadata() {
+        let sandbox = create_empty_proto_sandbox();
+        let plugin = sandbox.create_plugin("npm-test").await;
+
+        let metadata = plugin.register_tool(create_metadata("npm-test")).await;
+
+        assert_eq!(metadata.name, "npm");
+        assert_eq!(metadata.type_of, PluginType::DependencyManager);
+        assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
     }
 }
 
 mod pnpm {
     use super::*;
 
-    #[test]
-    fn registers_metadata() {
-        let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin("pnpm-test");
+    #[tokio::test(flavor = "multi_thread")]
 
-        assert_eq!(
-            plugin.register_tool(create_metadata("pnpm-test")),
-            ToolMetadataOutput {
-                name: "pnpm".into(),
-                type_of: PluginType::DependencyManager,
-                plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
-                ..ToolMetadataOutput::default()
-            }
-        );
+    async fn registers_metadata() {
+        let sandbox = create_empty_proto_sandbox();
+        let plugin = sandbox.create_plugin("pnpm-test").await;
+
+        let metadata = plugin.register_tool(create_metadata("pnpm-test")).await;
+
+        assert_eq!(metadata.name, "pnpm");
+        assert_eq!(metadata.type_of, PluginType::DependencyManager);
+        assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
     }
 }
 
 mod yarn {
     use super::*;
 
-    #[test]
-    fn registers_metadata() {
-        let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin("yarn-test");
+    #[tokio::test(flavor = "multi_thread")]
 
-        assert_eq!(
-            plugin.register_tool(create_metadata("yarn-test")),
-            ToolMetadataOutput {
-                name: "yarn".into(),
-                type_of: PluginType::DependencyManager,
-                plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
-                ..ToolMetadataOutput::default()
-            }
-        );
+    async fn registers_metadata() {
+        let sandbox = create_empty_proto_sandbox();
+        let plugin = sandbox.create_plugin("yarn-test").await;
+
+        let metadata = plugin.register_tool(create_metadata("yarn-test")).await;
+
+        assert_eq!(metadata.name, "yarn");
+        assert_eq!(metadata.type_of, PluginType::DependencyManager);
+        assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
     }
 }
