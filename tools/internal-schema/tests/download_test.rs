@@ -10,16 +10,18 @@ generate_download_install_tests!(
     Some(locate_fixture("schemas").join("base.toml"))
 );
 
-#[test]
-fn supports_linux_arm64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_arm64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::Linux, HostArch::Arm64);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::Linux, HostArch::Arm64);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin.download_prebuilt(DownloadPrebuiltInput {
@@ -28,7 +30,7 @@ fn supports_linux_arm64() {
                 ..Default::default()
             },
             ..Default::default()
-        }),
+        }).await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("moon-linux-aarch64-20.0.0".into()),
             checksum_name: Some("CHECKSUM.txt".into()),
@@ -39,16 +41,18 @@ fn supports_linux_arm64() {
     );
 }
 
-#[test]
-fn supports_linux_x64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_linux_x64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::Linux, HostArch::X64);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::Linux, HostArch::X64);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin.download_prebuilt(DownloadPrebuiltInput {
@@ -57,7 +61,7 @@ fn supports_linux_x64() {
                 ..Default::default()
             },
             ..Default::default()
-        }),
+        }).await,
         DownloadPrebuiltOutput {
             archive_prefix: Some("moon-linux-x86_64-20.0.0".into()),
             checksum_name: Some("CHECKSUM.txt".into()),
@@ -68,16 +72,18 @@ fn supports_linux_x64() {
     );
 }
 
-#[test]
-fn supports_macos_arm64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_macos_arm64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::MacOS, HostArch::Arm64);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::MacOS, HostArch::Arm64);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin.download_prebuilt(DownloadPrebuiltInput {
@@ -86,7 +92,7 @@ fn supports_macos_arm64() {
                 ..Default::default()
             },
             ..Default::default()
-        }),
+        }).await,
         DownloadPrebuiltOutput {
             archive_prefix: None,
             checksum_name: Some("SHASUM256.txt".into()),
@@ -97,16 +103,18 @@ fn supports_macos_arm64() {
     );
 }
 
-#[test]
-fn supports_macos_x64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_macos_x64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::MacOS, HostArch::X64);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::MacOS, HostArch::X64);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin.download_prebuilt(DownloadPrebuiltInput {
@@ -115,7 +123,7 @@ fn supports_macos_x64() {
                 ..Default::default()
             },
             ..Default::default()
-        }),
+        }).await,
         DownloadPrebuiltOutput {
             archive_prefix: None,
             checksum_name: Some("SHASUM256.txt".into()),
@@ -126,16 +134,18 @@ fn supports_macos_x64() {
     );
 }
 
-#[test]
-fn supports_windows_arm64() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_windows_arm64() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::Windows, HostArch::Arm64);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::Windows, HostArch::Arm64);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin.download_prebuilt(DownloadPrebuiltInput {
@@ -144,7 +154,7 @@ fn supports_windows_arm64() {
                 ..Default::default()
             },
             ..Default::default()
-        }),
+        }).await,
         DownloadPrebuiltOutput {
             archive_prefix: None,
             checksum_name: Some("CHECKSUM.txt".into()),
@@ -155,16 +165,18 @@ fn supports_windows_arm64() {
     );
 }
 
-#[test]
-fn supports_windows_x86() {
+#[tokio::test(flavor = "multi_thread")]
+async fn supports_windows_x86() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::Windows, HostArch::X86);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::Windows, HostArch::X86);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin.download_prebuilt(DownloadPrebuiltInput {
@@ -173,7 +185,7 @@ fn supports_windows_x86() {
                 ..Default::default()
             },
             ..Default::default()
-        }),
+        }).await,
         DownloadPrebuiltOutput {
             archive_prefix: None,
             checksum_name: Some("CHECKSUM.txt".into()),
@@ -184,16 +196,18 @@ fn supports_windows_x86() {
     );
 }
 
-#[test]
-fn locates_linux_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_linux_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::Linux, HostArch::Arm64);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::Linux, HostArch::Arm64);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin
@@ -203,6 +217,7 @@ fn locates_linux_bin() {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
@@ -210,16 +225,18 @@ fn locates_linux_bin() {
     );
 }
 
-#[test]
-fn locates_macos_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_macos_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::MacOS, HostArch::X64);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::MacOS, HostArch::X64);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin
@@ -229,6 +246,7 @@ fn locates_macos_bin() {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
@@ -236,16 +254,18 @@ fn locates_macos_bin() {
     );
 }
 
-#[test]
-fn locates_windows_bin() {
+#[tokio::test(flavor = "multi_thread")]
+async fn locates_windows_bin() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin_with_config(
-        "schema-test",
-        locate_fixture("schemas").join("bins.toml"),
-        |config| {
-            config.host(HostOS::Windows, HostArch::X64);
-        },
-    );
+    let plugin = sandbox
+        .create_schema_plugin_with_config(
+            "schema-test",
+            locate_fixture("schemas").join("bins.toml"),
+            |config| {
+                config.host(HostOS::Windows, HostArch::X64);
+            },
+        )
+        .await;
 
     assert_eq!(
         plugin
@@ -255,6 +275,7 @@ fn locates_windows_bin() {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap()
             .exe_path,
@@ -265,16 +286,18 @@ fn locates_windows_bin() {
 mod primary {
     use super::*;
 
-    #[test]
-    fn sets_primary_config() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn sets_primary_config() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_schema_plugin_with_config(
-            "schema-test",
-            locate_fixture("schemas").join("primary.toml"),
-            |config| {
-                config.host(HostOS::MacOS, HostArch::X64);
-            },
-        );
+        let plugin = sandbox
+            .create_schema_plugin_with_config(
+                "schema-test",
+                locate_fixture("schemas").join("primary.toml"),
+                |config| {
+                    config.host(HostOS::MacOS, HostArch::X64);
+                },
+            )
+            .await;
 
         let config = plugin
             .locate_executables(LocateExecutablesInput {
@@ -283,6 +306,7 @@ mod primary {
                     ..Default::default()
                 },
             })
+            .await
             .primary
             .unwrap();
 
@@ -294,16 +318,18 @@ mod primary {
         );
     }
 
-    #[test]
-    fn auto_adds_exe_to_bin_on_windows() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn auto_adds_exe_to_bin_on_windows() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_schema_plugin_with_config(
-            "schema-test",
-            locate_fixture("schemas").join("primary.toml"),
-            |config| {
-                config.host(HostOS::Windows, HostArch::X64);
-            },
-        );
+        let plugin = sandbox
+            .create_schema_plugin_with_config(
+                "schema-test",
+                locate_fixture("schemas").join("primary.toml"),
+                |config| {
+                    config.host(HostOS::Windows, HostArch::X64);
+                },
+            )
+            .await;
 
         assert_eq!(
             plugin
@@ -313,6 +339,7 @@ mod primary {
                         ..Default::default()
                     },
                 })
+                .await
                 .primary
                 .unwrap()
                 .exe_path,
@@ -320,16 +347,18 @@ mod primary {
         );
     }
 
-    #[test]
-    fn primary_path_doesnt_override_platform_path() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn primary_path_doesnt_override_platform_path() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_schema_plugin_with_config(
-            "schema-test",
-            locate_fixture("schemas").join("primary-platform.toml"),
-            |config| {
-                config.host(HostOS::Linux, HostArch::X64);
-            },
-        );
+        let plugin = sandbox
+            .create_schema_plugin_with_config(
+                "schema-test",
+                locate_fixture("schemas").join("primary-platform.toml"),
+                |config| {
+                    config.host(HostOS::Linux, HostArch::X64);
+                },
+            )
+            .await;
 
         assert_eq!(
             plugin
@@ -339,6 +368,7 @@ mod primary {
                         ..Default::default()
                     },
                 })
+                .await
                 .primary
                 .unwrap()
                 .exe_path,
@@ -350,16 +380,18 @@ mod primary {
 mod secondary {
     use super::*;
 
-    #[test]
-    fn sets_secondary_config() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn sets_secondary_config() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_schema_plugin_with_config(
-            "schema-test",
-            locate_fixture("schemas").join("secondary.toml"),
-            |config| {
-                config.host(HostOS::MacOS, HostArch::X64);
-            },
-        );
+        let plugin = sandbox
+            .create_schema_plugin_with_config(
+                "schema-test",
+                locate_fixture("schemas").join("secondary.toml"),
+                |config| {
+                    config.host(HostOS::MacOS, HostArch::X64);
+                },
+            )
+            .await;
 
         let secondary = plugin
             .locate_executables(LocateExecutablesInput {
@@ -368,6 +400,7 @@ mod secondary {
                     ..Default::default()
                 },
             })
+            .await
             .secondary;
 
         let foo = secondary.get("foo").unwrap();
@@ -395,16 +428,18 @@ mod secondary {
         assert_eq!(qux.parent_exe_name, Some("node".into()));
     }
 
-    #[test]
-    fn auto_adds_exe_to_bin_on_windows() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn auto_adds_exe_to_bin_on_windows() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_schema_plugin_with_config(
-            "schema-test",
-            locate_fixture("schemas").join("secondary.toml"),
-            |config| {
-                config.host(HostOS::Windows, HostArch::X64);
-            },
-        );
+        let plugin = sandbox
+            .create_schema_plugin_with_config(
+                "schema-test",
+                locate_fixture("schemas").join("secondary.toml"),
+                |config| {
+                    config.host(HostOS::Windows, HostArch::X64);
+                },
+            )
+            .await;
 
         let secondary = plugin
             .locate_executables(LocateExecutablesInput {
@@ -413,6 +448,7 @@ mod secondary {
                     ..Default::default()
                 },
             })
+            .await
             .secondary;
 
         assert_eq!(

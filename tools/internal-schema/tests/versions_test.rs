@@ -11,39 +11,43 @@ generate_resolve_versions_tests!(
     Some(locate_fixture("schemas").join("base.toml"))
 );
 
-#[test]
-fn loads_versions_from_git_tags() {
+#[tokio::test(flavor = "multi_thread")]
+async fn loads_versions_from_git_tags() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin =
-        sandbox.create_schema_plugin("schema-test", locate_fixture("schemas").join("base.toml"));
+    let plugin = sandbox
+        .create_schema_plugin("schema-test", locate_fixture("schemas").join("base.toml"))
+        .await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(!output.versions.is_empty());
 }
 
-#[test]
-fn sets_latest_alias() {
+#[tokio::test(flavor = "multi_thread")]
+async fn sets_latest_alias() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin =
-        sandbox.create_schema_plugin("schema-test", locate_fixture("schemas").join("base.toml"));
+    let plugin = sandbox
+        .create_schema_plugin("schema-test", locate_fixture("schemas").join("base.toml"))
+        .await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(output.latest.is_some());
     assert!(output.aliases.contains_key("latest"));
     assert_eq!(output.aliases.get("latest"), output.latest.as_ref());
 }
 
-#[test]
-fn version_pattern_supports_common_classes() {
+#[tokio::test(flavor = "multi_thread")]
+async fn version_pattern_supports_common_classes() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_schema_plugin(
-        "schema-test",
-        locate_fixture("schemas").join("version-pattern.toml"),
-    );
+    let plugin = sandbox
+        .create_schema_plugin(
+            "schema-test",
+            locate_fixture("schemas").join("version-pattern.toml"),
+        )
+        .await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(!output.versions.is_empty());
 }
