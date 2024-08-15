@@ -2,6 +2,7 @@ use crate::config::GoPluginConfig;
 use crate::version::{from_go_version, to_go_version};
 use extism_pdk::*;
 use proto_pdk::*;
+use schematic::SchemaBuilder;
 use std::collections::HashMap;
 
 #[host_fn]
@@ -17,6 +18,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
     Ok(Json(ToolMetadataOutput {
         name: NAME.into(),
         type_of: PluginType::Language,
+        config_schema: Some(SchemaBuilder::build_root::<GoPluginConfig>()),
         plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
         ..ToolMetadataOutput::default()
     }))

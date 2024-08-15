@@ -1,6 +1,7 @@
 use crate::config::DenoPluginConfig;
 use extism_pdk::*;
 use proto_pdk::*;
+use schematic::SchemaBuilder;
 
 #[host_fn]
 extern "ExtismHost" {
@@ -15,6 +16,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
     Ok(Json(ToolMetadataOutput {
         name: NAME.into(),
         type_of: PluginType::Language,
+        config_schema: Some(SchemaBuilder::build_root::<DenoPluginConfig>()),
         plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
         self_upgrade_commands: vec!["upgrade".into()],
         ..ToolMetadataOutput::default()

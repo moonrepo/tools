@@ -9,6 +9,9 @@ proto_pdk = { version = "0.22.0", path = "../proto/crates/pdk" }
 proto_pdk_api = { version = "0.22.0", path = "../proto/crates/pdk-api" }
 proto_pdk_test_utils = { version = "0.26.0", path = "../proto/crates/pdk-test-utils" }
 regex = { version = "1.10.6", default-features = false, features = ["std"] }
+schematic = { version = "0.17.2", default-features = false, features = [
+	"schema",
+] }
 serde = "1.0.208"
 serde_json = "1.0.125"
 serial_test = "3.1.1"

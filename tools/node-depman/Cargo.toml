@@ -19,6 +19,7 @@ extism-pdk = { workspace = true }
 nodejs_package_json = { workspace = true }
 proto_pdk = { workspace = true }
 regex = { workspace = true, features = ["unicode"] }
+schematic = { workspace = true }
 serde = { workspace = true }
 
 [dev-dependencies]

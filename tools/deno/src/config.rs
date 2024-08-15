@@ -1,4 +1,4 @@
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, schematic::Schematic, serde::Deserialize, serde::Serialize)]
 #[serde(default, deny_unknown_fields, rename_all = "kebab-case")]
 pub struct DenoPluginConfig {
     pub dist_url: String,

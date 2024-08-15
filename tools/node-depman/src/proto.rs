@@ -5,6 +5,7 @@ use extism_pdk::*;
 use node_common::{NodeDistVersion, VoltaField};
 use nodejs_package_json::PackageJson;
 use proto_pdk::*;
+use schematic::SchemaBuilder;
 use std::collections::HashMap;
 
 #[host_fn]
@@ -20,6 +21,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
     Ok(Json(ToolMetadataOutput {
         name: manager.to_string(),
         type_of: PluginType::DependencyManager,
+        config_schema: Some(SchemaBuilder::build_root::<NodeDepmanPluginConfig>()),
         default_version: if manager == PackageManager::Npm {
             Some(UnresolvedVersionSpec::Alias("bundled".into()))
         } else {
