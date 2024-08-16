@@ -1,5 +1,5 @@
 [plugins]
-bun-test = "file:///Users/miles/.cargo/shared-target/wasm32-wasi/debug/bun_tool.wasm"
+bun-test = "file://./target/wasm32-wasi/debug/bun_tool.wasm"
 deno-test = "file://./target/wasm32-wasi/debug/deno_tool.wasm"
 go-test = "file://./target/wasm32-wasi/debug/go_tool.wasm"
 # internal-schema = "file://./target/wasm32-wasi/debug/schema_tool.wasm"
