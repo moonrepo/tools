@@ -215,7 +215,7 @@ checksum = "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
 
 [[package]]
 name = "bun_tool"
-version = "0.12.3"
+version = "0.13.0"
 dependencies = [
  "extism-pdk",
  "proto_pdk",
