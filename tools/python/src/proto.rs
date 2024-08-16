@@ -108,7 +108,7 @@ pub fn download_prebuilt(
         }));
     }
 
-    let releases: BTreeMap<Version, BTreeMap<String, ReleaseEntry>> = fetch_url(
+    let releases: BTreeMap<Version, BTreeMap<String, ReleaseEntry>> = fetch_json(
         "https://raw.githubusercontent.com/moonrepo/tools/master/tools/python/releases.json",
     )?;
 

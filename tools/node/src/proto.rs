@@ -3,6 +3,7 @@ use extism_pdk::*;
 use node_common::{NodeDistLTS, NodeDistVersion, VoltaField};
 use nodejs_package_json::PackageJson;
 use proto_pdk::*;
+use schematic::SchemaBuilder;
 
 #[host_fn]
 extern "ExtismHost" {
@@ -17,6 +18,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
     Ok(Json(ToolMetadataOutput {
         name: NAME.into(),
         type_of: PluginType::Language,
+        config_schema: Some(SchemaBuilder::build_root::<NodePluginConfig>()),
         plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
         ..ToolMetadataOutput::default()
     }))
@@ -78,7 +80,7 @@ pub fn parse_version_file(
 pub fn load_versions(Json(_): Json<LoadVersionsInput>) -> FnResult<Json<LoadVersionsOutput>> {
     let mut output = LoadVersionsOutput::default();
     let response: Vec<NodeDistVersion> =
-        fetch_url("https://nodejs.org/download/release/index.json")?;
+        fetch_json("https://nodejs.org/download/release/index.json")?;
 
     for (index, item) in response.iter().enumerate() {
         let version = UnresolvedVersionSpec::parse(&item.version[1..])?;
@@ -173,7 +175,7 @@ pub fn download_prebuilt(
     // When canary, extract the latest version from the index
     if version.is_canary() {
         let response: Vec<NodeDistVersion> =
-            fetch_url("https://nodejs.org/download/nightly/index.json")?;
+            fetch_json("https://nodejs.org/download/nightly/index.json")?;
         let file_to_match = match env.os {
             HostOS::Linux => format!("linux-{arch}"),
             HostOS::MacOS => format!("osx-{arch}-tar"),

@@ -1,6 +1,7 @@
 use crate::config::DenoPluginConfig;
 use extism_pdk::*;
 use proto_pdk::*;
+use schematic::SchemaBuilder;
 
 #[host_fn]
 extern "ExtismHost" {
@@ -15,6 +16,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
     Ok(Json(ToolMetadataOutput {
         name: NAME.into(),
         type_of: PluginType::Language,
+        config_schema: Some(SchemaBuilder::build_root::<DenoPluginConfig>()),
         plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
         self_upgrade_commands: vec!["upgrade".into()],
         ..ToolMetadataOutput::default()
@@ -73,11 +75,11 @@ pub fn download_prebuilt(
     let filename = format!("deno-{target}.zip");
 
     let download_url = if version.is_canary() {
-        let hash = fetch_url_text(format!("https://dl.deno.land/canary-{target}-latest.txt"))?;
+        let hash = fetch_text(format!("https://dl.deno.land/canary-{target}-latest.txt"))?;
 
         format!("https://dl.deno.land/canary/{}/{filename}", hash.trim())
     } else if version.is_latest() {
-        let tag = fetch_url_text("https://dl.deno.land/release-latest.txt")?;
+        let tag = fetch_text("https://dl.deno.land/release-latest.txt")?;
 
         format!("https://dl.deno.land/release/{}/{filename}", tag.trim())
     } else {

@@ -6,22 +6,22 @@ generate_resolve_versions_tests!("bun-test", {
     "1.1.0" => "1.1.0",
 });
 
-#[test]
-fn loads_versions_from_git() {
+#[tokio::test(flavor = "multi_thread")]
+async fn loads_versions_from_git() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("bun-test");
+    let plugin = sandbox.create_plugin("bun-test").await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(!output.versions.is_empty());
 }
 
-#[test]
-fn sets_latest_alias() {
+#[tokio::test(flavor = "multi_thread")]
+async fn sets_latest_alias() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("bun-test");
+    let plugin = sandbox.create_plugin("bun-test").await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(output.latest.is_some());
     assert!(output.aliases.contains_key("latest"));

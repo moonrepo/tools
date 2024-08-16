@@ -1,9 +1,9 @@
 use proto_pdk_test_utils::*;
 
-#[tokio::test]
+#[tokio::test(flavor = "multi_thread")]
 async fn doesnt_create_global_shims() {
     let sandbox = create_empty_proto_sandbox();
-    let mut plugin = sandbox.create_plugin("rust-test");
+    let mut plugin = sandbox.create_plugin("rust-test").await;
 
     plugin.tool.generate_shims(false).await.unwrap();
 

@@ -104,11 +104,13 @@ pub struct MetadataSchema {
 #[derive(Debug, Default, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum SchemaType {
-    #[default]
-    Language,
+    #[serde(alias = "cli")]
+    CommandLine,
     #[serde(alias = "package-manager")]
     DependencyManager,
-    Cli,
+    #[default]
+    Language,
+    VersionManager,
 }
 
 #[derive(Debug, Default, Deserialize)]

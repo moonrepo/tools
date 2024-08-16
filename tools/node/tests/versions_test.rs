@@ -9,34 +9,34 @@ generate_resolve_versions_tests!("node-test", {
     // "node" => "22.4.1",
 });
 
-#[test]
-fn loads_versions_from_dist_url() {
+#[tokio::test(flavor = "multi_thread")]
+async fn loads_versions_from_dist_url() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(!output.versions.is_empty());
 }
 
-#[test]
-fn sets_latest_alias() {
+#[tokio::test(flavor = "multi_thread")]
+async fn sets_latest_alias() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
 
     assert!(output.latest.is_some());
     assert!(output.aliases.contains_key("latest"));
     assert_eq!(output.aliases.get("latest"), output.latest.as_ref());
 }
 
-#[test]
-fn sets_lts_aliases() {
+#[tokio::test(flavor = "multi_thread")]
+async fn sets_lts_aliases() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
-    let output = plugin.load_versions(LoadVersionsInput::default());
+    let output = plugin.load_versions(LoadVersionsInput::default()).await;
     let mut aliases = output.aliases.keys().collect::<Vec<_>>();
     aliases.sort();
 
@@ -49,96 +49,108 @@ fn sets_lts_aliases() {
     );
 }
 
-#[test]
-fn parses_engines() {
+#[tokio::test(flavor = "multi_thread")]
+async fn parses_engines() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
     assert_eq!(
-        plugin.parse_version_file(ParseVersionFileInput {
-            content: r#"{ "engines": { "node": ">=16" } }"#.into(),
-            file: "package.json".into(),
-        }),
+        plugin
+            .parse_version_file(ParseVersionFileInput {
+                content: r#"{ "engines": { "node": ">=16" } }"#.into(),
+                file: "package.json".into(),
+            })
+            .await,
         ParseVersionFileOutput {
             version: Some(UnresolvedVersionSpec::parse(">=16").unwrap()),
         }
     );
 }
 
-#[test]
-fn parses_volta() {
+#[tokio::test(flavor = "multi_thread")]
+async fn parses_volta() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
     assert_eq!(
-        plugin.parse_version_file(ParseVersionFileInput {
-            content: r#"{ "volta": { "node": "16.20.2" } }"#.into(),
-            file: "package.json".into(),
-        }),
+        plugin
+            .parse_version_file(ParseVersionFileInput {
+                content: r#"{ "volta": { "node": "16.20.2" } }"#.into(),
+                file: "package.json".into(),
+            })
+            .await,
         ParseVersionFileOutput {
             version: Some(UnresolvedVersionSpec::parse("16.20.2").unwrap()),
         }
     );
 }
 
-#[test]
-fn parses_nvmrc() {
+#[tokio::test(flavor = "multi_thread")]
+async fn parses_nvmrc() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
     assert_eq!(
-        plugin.parse_version_file(ParseVersionFileInput {
-            content: "~20".into(),
-            file: ".nvmrc".into(),
-        }),
+        plugin
+            .parse_version_file(ParseVersionFileInput {
+                content: "~20".into(),
+                file: ".nvmrc".into(),
+            })
+            .await,
         ParseVersionFileOutput {
             version: Some(UnresolvedVersionSpec::parse("~20").unwrap()),
         }
     );
 }
 
-#[test]
-fn parses_nvmrc_with_comment() {
+#[tokio::test(flavor = "multi_thread")]
+async fn parses_nvmrc_with_comment() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
     assert_eq!(
-        plugin.parse_version_file(ParseVersionFileInput {
-            content: "# comment\n^20.1".into(),
-            file: ".nvmrc".into(),
-        }),
+        plugin
+            .parse_version_file(ParseVersionFileInput {
+                content: "# comment\n^20.1".into(),
+                file: ".nvmrc".into(),
+            })
+            .await,
         ParseVersionFileOutput {
             version: Some(UnresolvedVersionSpec::parse("^20.1").unwrap()),
         }
     );
 }
 
-#[test]
-fn parses_node_version() {
+#[tokio::test(flavor = "multi_thread")]
+async fn parses_node_version() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
     assert_eq!(
-        plugin.parse_version_file(ParseVersionFileInput {
-            content: "~20".into(),
-            file: ".node-version".into(),
-        }),
+        plugin
+            .parse_version_file(ParseVersionFileInput {
+                content: "~20".into(),
+                file: ".node-version".into(),
+            })
+            .await,
         ParseVersionFileOutput {
             version: Some(UnresolvedVersionSpec::parse("~20").unwrap()),
         }
     );
 }
 
-#[test]
-fn parses_node_version_with_comment() {
+#[tokio::test(flavor = "multi_thread")]
+async fn parses_node_version_with_comment() {
     let sandbox = create_empty_proto_sandbox();
-    let plugin = sandbox.create_plugin("node-test");
+    let plugin = sandbox.create_plugin("node-test").await;
 
     assert_eq!(
-        plugin.parse_version_file(ParseVersionFileInput {
-            content: "# comment\n^20.1".into(),
-            file: ".node-version".into(),
-        }),
+        plugin
+            .parse_version_file(ParseVersionFileInput {
+                content: "# comment\n^20.1".into(),
+                file: ".node-version".into(),
+            })
+            .await,
         ParseVersionFileOutput {
             version: Some(UnresolvedVersionSpec::parse("^20.1").unwrap()),
         }

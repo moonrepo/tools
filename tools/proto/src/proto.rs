@@ -11,7 +11,7 @@ extern "ExtismHost" {
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
     Ok(Json(ToolMetadataOutput {
         name: "proto".into(),
-        type_of: PluginType::CLI,
+        type_of: PluginType::CommandLine,
         plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
         self_upgrade_commands: vec!["up".into(), "upgrade".into()],
         ..ToolMetadataOutput::default()

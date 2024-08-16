@@ -18,6 +18,7 @@ node_common = { path = "../../crates/node-common" }
 extism-pdk = { workspace = true }
 nodejs_package_json = { workspace = true }
 proto_pdk = { workspace = true }
+schematic = { workspace = true }
 serde = { workspace = true }
 
 [dev-dependencies]

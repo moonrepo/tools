@@ -26,7 +26,6 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
         type_of: PluginType::Language,
         default_version: Some(UnresolvedVersionSpec::Alias("stable".into())),
         inventory: ToolInventoryMetadata {
-            disable_progress_bars: true,
             override_dir: Some(get_toolchain_dir(&env)?),
             version_suffix: Some(format!("-{}", get_target_triple(&env, NAME)?)),
         },
@@ -117,15 +116,11 @@ pub fn native_install(
         if !script_path.exists() {
             fs::write(
                 &script_path,
-                fetch(
-                    HttpRequest::new(if is_windows {
-                        "https://win.rustup.rs"
-                    } else {
-                        "https://sh.rustup.rs"
-                    }),
-                    None,
-                )?
-                .body(),
+                fetch_bytes(if is_windows {
+                    "https://win.rustup.rs"
+                } else {
+                    "https://sh.rustup.rs"
+                })?,
             )?;
         }
 

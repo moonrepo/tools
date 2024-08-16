@@ -5,21 +5,25 @@ mod npm {
 
     generate_download_install_tests!("npm-test", "9.0.0");
 
-    #[test]
-    fn supports_prebuilt() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn supports_prebuilt() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin_with_config("npm-test", |config| {
-            config.host(HostOS::Linux, HostArch::Arm64);
-        });
+        let plugin = sandbox
+            .create_plugin_with_config("npm-test", |config| {
+                config.host(HostOS::Linux, HostArch::Arm64);
+            })
+            .await;
 
         assert_eq!(
-            plugin.download_prebuilt(DownloadPrebuiltInput {
-                context: ToolContext {
-                    version: VersionSpec::parse("9.0.0").unwrap(),
+            plugin
+                .download_prebuilt(DownloadPrebuiltInput {
+                    context: ToolContext {
+                        version: VersionSpec::parse("9.0.0").unwrap(),
+                        ..Default::default()
+                    },
                     ..Default::default()
-                },
-                ..Default::default()
-            }),
+                })
+                .await,
             DownloadPrebuiltOutput {
                 archive_prefix: Some("package".into()),
                 download_url: "https://registry.npmjs.org/npm/-/npm-9.0.0.tgz".into(),
@@ -28,12 +32,14 @@ mod npm {
         );
     }
 
-    #[test]
-    fn locates_default_bin() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn locates_default_bin() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin_with_config("npm-test", |config| {
-            config.host(HostOS::Linux, HostArch::Arm64);
-        });
+        let plugin = sandbox
+            .create_plugin_with_config("npm-test", |config| {
+                config.host(HostOS::Linux, HostArch::Arm64);
+            })
+            .await;
 
         assert_eq!(
             plugin
@@ -43,6 +49,7 @@ mod npm {
                         ..Default::default()
                     },
                 })
+                .await
                 .primary
                 .unwrap()
                 .exe_path,
@@ -56,21 +63,25 @@ mod pnpm {
 
     generate_download_install_tests!("pnpm-test", "8.0.0");
 
-    #[test]
-    fn supports_prebuilt() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn supports_prebuilt() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin_with_config("pnpm-test", |config| {
-            config.host(HostOS::Windows, HostArch::X64);
-        });
+        let plugin = sandbox
+            .create_plugin_with_config("pnpm-test", |config| {
+                config.host(HostOS::Windows, HostArch::X64);
+            })
+            .await;
 
         assert_eq!(
-            plugin.download_prebuilt(DownloadPrebuiltInput {
-                context: ToolContext {
-                    version: VersionSpec::parse("8.0.0").unwrap(),
+            plugin
+                .download_prebuilt(DownloadPrebuiltInput {
+                    context: ToolContext {
+                        version: VersionSpec::parse("8.0.0").unwrap(),
+                        ..Default::default()
+                    },
                     ..Default::default()
-                },
-                ..Default::default()
-            }),
+                })
+                .await,
             DownloadPrebuiltOutput {
                 archive_prefix: Some("package".into()),
                 download_url: "https://registry.npmjs.org/pnpm/-/pnpm-8.0.0.tgz".into(),
@@ -79,12 +90,14 @@ mod pnpm {
         );
     }
 
-    #[test]
-    fn locates_default_bin() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn locates_default_bin() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin_with_config("pnpm-test", |config| {
-            config.host(HostOS::Windows, HostArch::X64);
-        });
+        let plugin = sandbox
+            .create_plugin_with_config("pnpm-test", |config| {
+                config.host(HostOS::Windows, HostArch::X64);
+            })
+            .await;
 
         assert_eq!(
             plugin
@@ -94,6 +107,7 @@ mod pnpm {
                         ..Default::default()
                     },
                 })
+                .await
                 .primary
                 .unwrap()
                 .exe_path,
@@ -107,21 +121,25 @@ mod yarn {
 
     generate_download_install_tests!("yarn-test", "1.22.0");
 
-    #[test]
-    fn supports_prebuilt() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn supports_prebuilt() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin_with_config("yarn-test", |config| {
-            config.host(HostOS::MacOS, HostArch::X64);
-        });
+        let plugin = sandbox
+            .create_plugin_with_config("yarn-test", |config| {
+                config.host(HostOS::MacOS, HostArch::X64);
+            })
+            .await;
 
         assert_eq!(
-            plugin.download_prebuilt(DownloadPrebuiltInput {
-                context: ToolContext {
-                    version: VersionSpec::parse("1.22.0").unwrap(),
+            plugin
+                .download_prebuilt(DownloadPrebuiltInput {
+                    context: ToolContext {
+                        version: VersionSpec::parse("1.22.0").unwrap(),
+                        ..Default::default()
+                    },
                     ..Default::default()
-                },
-                ..Default::default()
-            }),
+                })
+                .await,
             DownloadPrebuiltOutput {
                 archive_prefix: Some("yarn-v1.22.0".into()),
                 download_url: "https://registry.npmjs.org/yarn/-/yarn-1.22.0.tgz".into(),
@@ -130,12 +148,14 @@ mod yarn {
         );
     }
 
-    #[test]
-    fn locates_default_bin() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn locates_default_bin() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin_with_config("yarn-test", |config| {
-            config.host(HostOS::MacOS, HostArch::X64);
-        });
+        let plugin = sandbox
+            .create_plugin_with_config("yarn-test", |config| {
+                config.host(HostOS::MacOS, HostArch::X64);
+            })
+            .await;
 
         assert_eq!(
             plugin
@@ -145,6 +165,7 @@ mod yarn {
                         ..Default::default()
                     },
                 })
+                .await
                 .primary
                 .unwrap()
                 .exe_path,
@@ -165,21 +186,25 @@ mod yarn_berry {
 
     generate_download_install_tests!("yarn-test", "3.6.1");
 
-    #[test]
-    fn supports_prebuilt() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn supports_prebuilt() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin_with_config("yarn-test", |config| {
-            config.host(HostOS::MacOS, HostArch::X64);
-        });
+        let plugin = sandbox
+            .create_plugin_with_config("yarn-test", |config| {
+                config.host(HostOS::MacOS, HostArch::X64);
+            })
+            .await;
 
         assert_eq!(
-            plugin.download_prebuilt(DownloadPrebuiltInput {
-                context: ToolContext {
-                    version: VersionSpec::parse("3.6.1").unwrap(),
+            plugin
+                .download_prebuilt(DownloadPrebuiltInput {
+                    context: ToolContext {
+                        version: VersionSpec::parse("3.6.1").unwrap(),
+                        ..Default::default()
+                    },
                     ..Default::default()
-                },
-                ..Default::default()
-            }),
+                })
+                .await,
             DownloadPrebuiltOutput {
                 archive_prefix: Some("package".into()),
                 download_url: "https://registry.npmjs.org/@yarnpkg/cli-dist/-/cli-dist-3.6.1.tgz"
@@ -189,12 +214,14 @@ mod yarn_berry {
         );
     }
 
-    #[test]
-    fn locates_default_bin() {
+    #[tokio::test(flavor = "multi_thread")]
+    async fn locates_default_bin() {
         let sandbox = create_empty_proto_sandbox();
-        let plugin = sandbox.create_plugin_with_config("yarn-test", |config| {
-            config.host(HostOS::MacOS, HostArch::X64);
-        });
+        let plugin = sandbox
+            .create_plugin_with_config("yarn-test", |config| {
+                config.host(HostOS::MacOS, HostArch::X64);
+            })
+            .await;
 
         assert_eq!(
             plugin
@@ -204,6 +231,7 @@ mod yarn_berry {
                         ..Default::default()
                     },
                 })
+                .await
                 .primary
                 .unwrap()
                 .exe_path,
