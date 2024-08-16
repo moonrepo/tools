@@ -8,7 +8,6 @@ mod npm {
     use super::*;
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn registers_metadata() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("npm-test").await;
@@ -25,7 +24,6 @@ mod pnpm {
     use super::*;
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn registers_metadata() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("pnpm-test").await;
@@ -42,7 +40,6 @@ mod yarn {
     use super::*;
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn registers_metadata() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("yarn-test").await;

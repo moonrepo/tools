@@ -10,7 +10,6 @@ mod npm {
     });
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn doesnt_parse_package_manager_if_diff_name() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("npm-test").await;
@@ -27,7 +26,6 @@ mod npm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_package_manager() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("npm-test").await;
@@ -46,7 +44,6 @@ mod npm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_package_manager_with_hash() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("npm-test").await;
@@ -63,7 +60,6 @@ mod npm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_package_manager_latest() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("npm-test").await;
@@ -82,7 +78,6 @@ mod npm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_engines() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("npm-test").await;
@@ -101,7 +96,6 @@ mod npm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_volta() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("npm-test").await;
@@ -130,7 +124,6 @@ mod pnpm {
     });
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn doesnt_parse_package_manager_if_diff_name() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("pnpm-test").await;
@@ -147,7 +140,6 @@ mod pnpm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_package_manager() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("pnpm-test").await;
@@ -166,7 +158,6 @@ mod pnpm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_package_manager_latest() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("pnpm-test").await;
@@ -185,7 +176,6 @@ mod pnpm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_engines() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("pnpm-test").await;
@@ -204,7 +194,6 @@ mod pnpm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_volta() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("pnpm-test").await;
@@ -234,7 +223,6 @@ mod yarn {
     });
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn doesnt_parse_package_manager_if_diff_name() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("yarn-test").await;
@@ -251,7 +239,6 @@ mod yarn {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_package_manager() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("yarn-test").await;
@@ -270,7 +257,6 @@ mod yarn {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_package_manager_latest() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("yarn-test").await;
@@ -289,7 +275,6 @@ mod yarn {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_engines() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("yarn-test").await;
@@ -308,7 +293,6 @@ mod yarn {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn parses_volta() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox.create_plugin("yarn-test").await;

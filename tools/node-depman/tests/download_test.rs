@@ -6,7 +6,6 @@ mod npm {
     generate_download_install_tests!("npm-test", "9.0.0");
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn supports_prebuilt() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox
@@ -34,7 +33,6 @@ mod npm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn locates_default_bin() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox
@@ -66,7 +64,6 @@ mod pnpm {
     generate_download_install_tests!("pnpm-test", "8.0.0");
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn supports_prebuilt() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox
@@ -94,7 +91,6 @@ mod pnpm {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn locates_default_bin() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox
@@ -126,7 +122,6 @@ mod yarn {
     generate_download_install_tests!("yarn-test", "1.22.0");
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn supports_prebuilt() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox
@@ -154,7 +149,6 @@ mod yarn {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn locates_default_bin() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox
@@ -193,7 +187,6 @@ mod yarn_berry {
     generate_download_install_tests!("yarn-test", "3.6.1");
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn supports_prebuilt() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox
@@ -222,7 +215,6 @@ mod yarn_berry {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-
     async fn locates_default_bin() {
         let sandbox = create_empty_proto_sandbox();
         let plugin = sandbox
