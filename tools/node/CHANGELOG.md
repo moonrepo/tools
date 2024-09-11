@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🐞 Fixes
+
+- Fixed arm64 -> x64 compatibility not working correctly for versions < 16.
+
 ## 0.12.0
 
 #### 🚀 Updates
@@ -10,7 +16,7 @@
 
 #### 🐞 Fixes
 
-- Fix macOS not resolving nightly releases correctly.
+- Fixed macOS not resolving nightly releases correctly.
 
 ## 0.11.7
 
