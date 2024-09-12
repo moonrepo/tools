@@ -3,7 +3,7 @@ use proto_pdk_test_utils::*;
 generate_resolve_versions_tests!("python-test", {
     "2.3" => "2.3.7",
     "3.10.1" => "3.10.1",
-    "3.10" => "3.10.14",
+    "3.10" => "3.10.15",
     // "3" => "3.12.4",
 });
 

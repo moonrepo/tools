@@ -156,7 +156,7 @@ pub fn download_prebuilt(
     let mut version = input.context.version;
     let mut host = get_tool_config::<NodePluginConfig>()?.dist_url;
 
-    let arch: String = match env.arch {
+    let mut arch: String = match env.arch {
         HostArch::Arm => "armv7l".into(),
         HostArch::Arm64 => "arm64".into(),
         HostArch::Powerpc64 => {
@@ -171,6 +171,16 @@ pub fn download_prebuilt(
         HostArch::X86 => "x86".into(),
         _ => unreachable!(),
     };
+
+    // Arm64 support was added after v16, but M1/M2 machines can
+    // run x64 binaries via Rosetta. This is a compat hack!
+    if env.arch == HostArch::Arm64 {
+        let m1_compat_version = Version::new(16, 0, 0);
+
+        if version.as_version().unwrap_or(&m1_compat_version).major < 16 {
+            arch = "x64".into();
+        }
+    }
 
     // When canary, extract the latest version from the index
     if version.is_canary() {
@@ -194,18 +204,7 @@ pub fn download_prebuilt(
 
     let prefix = match env.os {
         HostOS::Linux => format!("node-v{version}-linux-{arch}"),
-        HostOS::MacOS => {
-            let m1_compat_version = Version::new(20, 0, 0);
-            let parsed_version = version.as_version().unwrap_or(&m1_compat_version);
-
-            // Arm64 support was added after v16, but M1/M2 machines can
-            // run x64 binaries via Rosetta. This is a compat hack!
-            if env.arch == HostArch::Arm64 && parsed_version.major < 16 {
-                "darwin-x64".into()
-            } else {
-                format!("node-v{version}-darwin-{arch}")
-            }
-        }
+        HostOS::MacOS => format!("node-v{version}-darwin-{arch}"),
         HostOS::Windows => format!("node-v{version}-win-{arch}"),
         _ => unreachable!(),
     };

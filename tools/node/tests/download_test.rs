@@ -194,6 +194,36 @@ async fn supports_macos_arm64() {
 }
 
 #[tokio::test(flavor = "multi_thread")]
+async fn supports_macos_arm64_pre_v16() {
+    let sandbox = create_empty_proto_sandbox();
+    let plugin = sandbox
+        .create_plugin_with_config("node-test", |config| {
+            config.host(HostOS::MacOS, HostArch::Arm64);
+        })
+        .await;
+
+    assert_eq!(
+        plugin
+            .download_prebuilt(DownloadPrebuiltInput {
+                context: ToolContext {
+                    version: VersionSpec::parse("12.0.0").unwrap(),
+                    ..Default::default()
+                },
+                ..Default::default()
+            })
+            .await,
+        DownloadPrebuiltOutput {
+            archive_prefix: Some("node-v12.0.0-darwin-x64".into()),
+            checksum_url: Some("https://nodejs.org/download/release/v12.0.0/SHASUMS256.txt".into()),
+            download_name: Some("node-v12.0.0-darwin-x64.tar.xz".into()),
+            download_url:
+                "https://nodejs.org/download/release/v12.0.0/node-v12.0.0-darwin-x64.tar.xz".into(),
+            ..Default::default()
+        }
+    );
+}
+
+#[tokio::test(flavor = "multi_thread")]
 async fn supports_macos_x64() {
     let sandbox = create_empty_proto_sandbox();
     let plugin = sandbox
