@@ -137,7 +137,7 @@
       "checksum": "https://github.com/indygreg/python-build-standalone/releases/download/20240909/cpython-3.12.6%2B20240909-x86_64-unknown-linux-musl-lto-full.tar.zst.sha256"
     }
   },
-  "3.13.0rc2": {
+  "3.13.0-rc.2": {
     "aarch64-apple-darwin": {
       "download": "https://github.com/indygreg/python-build-standalone/releases/download/20240909/cpython-3.13.0rc2%2B20240909-aarch64-apple-darwin-pgo%2Blto-full.tar.zst",
       "checksum": "https://github.com/indygreg/python-build-standalone/releases/download/20240909/cpython-3.13.0rc2%2B20240909-aarch64-apple-darwin-pgo%2Blto-full.tar.zst.sha256"

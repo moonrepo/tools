@@ -75,6 +75,17 @@ function mapTriple(triple) {
   }
 }
 
+function mapVersion(version) {
+  let parts = version.match(/(\d+)\.(\d+)(?:\.(\d+))(?:([a-z]+)([0-9]+))?/);
+  let value = `${parts[1]}.${parts[2]}.${parts[3] || 0}`;
+
+  if (parts[4]) {
+    value += `-${parts[4]}.${parts[5]}`;
+  }
+
+  return value;
+}
+
 function extractTripleInfo(assetName, releaseName) {
   let name = assetName.replace("cpython-", "");
   let version = "";
@@ -103,7 +114,7 @@ function extractTripleInfo(assetName, releaseName) {
 
   return {
     triple: mapTriple(triple),
-    version,
+    version: mapVersion(version),
     sha256,
   };
 }
