@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Updated shared globals injection to work for all npm commands and not just add/remove.
+
 ## 0.13.0
 
 #### 🚀 Updates
