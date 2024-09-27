@@ -411,35 +411,13 @@ pub fn pre_run(Json(input): Json<RunHook>) -> FnResult<Json<RunHookResult>> {
     match manager {
         // npm install|add|etc -g <dep>
         PackageManager::Npm => {
-            let aliases = vec![
-                // install
-                "add",
-                "i",
-                "in",
-                "ins",
-                "inst",
-                "insta",
-                "instal",
-                "install",
-                "isnt",
-                "isnta",
-                "isntal",
-                "isntall",
-                // uninstall
-                "r",
-                "remove",
-                "rm",
-                "un",
-                "uninstall",
-                "unlink",
-            ];
+            let has_global = args
+                .iter()
+                .any(|arg| arg == "--global" || arg == "-g" || arg == "--location=global");
+            let has_location = args.iter().any(|arg| arg == "--location")
+                && args.iter().any(|arg| arg == "global");
 
-            if aliases.iter().any(|alias| *alias == args[0])
-                && args
-                    .iter()
-                    .any(|arg| arg == "--global" || arg == "-g" || arg == "--location=global")
-                && args.iter().all(|arg| arg != "--prefix")
-            {
+            if (has_global || has_location) && args.iter().all(|arg| arg != "--prefix") {
                 result
                     .env
                     .get_or_insert(HashMap::default())
@@ -459,7 +437,8 @@ pub fn pre_run(Json(input): Json<RunHook>) -> FnResult<Json<RunHookResult>> {
         // pnpm add|update|etc -g <dep>
         PackageManager::Pnpm => {
             let aliases = [
-                "add", "update", "remove", "list", "outdated", "why", "root", "bin",
+                "add", "update", "remove", "list", "outdated", "why", "root", "bin", "env",
+                "config",
             ];
 
             if aliases.iter().any(|alias| *alias == args[0])
@@ -480,12 +459,7 @@ pub fn pre_run(Json(input): Json<RunHook>) -> FnResult<Json<RunHookResult>> {
 
         // yarn global add|remove|etc <dep>
         PackageManager::Yarn => {
-            let aliases = ["add", "bin", "list", "remove", "upgrade"];
-
-            if args[0] == "global"
-                && aliases.iter().any(|alias| *alias == args[1])
-                && args.iter().all(|arg| arg != "--prefix")
-            {
+            if args[0] == "global" && args.iter().all(|arg| arg != "--prefix") {
                 result
                     .env
                     .get_or_insert(HashMap::default())

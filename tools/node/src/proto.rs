@@ -268,11 +268,6 @@ pub fn post_install(Json(input): Json<InstallHook>) -> FnResult<()> {
 
     let mut args = vec!["install", "npm", "bundled"];
 
-    if input.pinned {
-        args.push("--pin");
-        args.push("global");
-    }
-
     let passthrough_args = input
         .passthrough_args
         .iter()

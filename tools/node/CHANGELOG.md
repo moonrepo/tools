@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🐞 Fixes
+
+- Fixed "bundled" npm overwriting the pinned npm version.
+
 ## 0.12.1
 
 #### 🐞 Fixes
