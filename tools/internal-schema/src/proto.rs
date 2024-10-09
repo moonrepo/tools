@@ -173,7 +173,7 @@ pub fn detect_version_files(_: ()) -> FnResult<Json<DetectVersionOutput>> {
 
 fn interpolate_tokens(
     value: &str,
-    version: &str,
+    version: &VersionSpec,
     schema: &Schema,
     env: &HostEnvironment,
 ) -> String {
@@ -181,7 +181,7 @@ fn interpolate_tokens(
     let os = env.os.to_string();
 
     let mut value = value
-        .replace("{version}", version)
+        .replace("{version}", &version.to_string())
         .replace(
             "{arch}",
             schema.install.arch.get(&env.arch).unwrap_or(&arch),
@@ -196,6 +196,30 @@ fn interpolate_tokens(
             "{libc}",
             schema.install.libc.get(&env.libc).unwrap_or(&libc),
         );
+    }
+
+    if let Some(v) = version.as_version() {
+        let major = v.major.to_string();
+        let major_minor = format!("{}.{}", v.major, v.minor);
+        let year_month = format!("{:0>4}-{:0>2}", v.major, v.minor);
+        let pre = v.pre.to_string();
+        let build = v.build.to_string();
+
+        value = value
+            .replace("{versionMajor}", &major)
+            .replace("{versionMajorMinor}", &major_minor)
+            .replace("{versionYear}", &major)
+            .replace("{versionYearMonth}", &year_month)
+            .replace("{versionPrerelease}", &pre)
+            .replace("{versionBuild}", &build);
+    } else {
+        value = value
+            .replace("{versionMajor}", "")
+            .replace("{versionMajorMinor}", "")
+            .replace("{versionYear}", "")
+            .replace("{versionYearMonth}", "")
+            .replace("{versionPrerelease}", "")
+            .replace("{versionBuild}", "");
     }
 
     value
@@ -217,10 +241,10 @@ pub fn download_prebuilt(
         )?;
     }
 
-    let version = input.context.version.to_string();
-    let is_canary = version == "canary";
+    let version = &input.context.version;
+    let is_canary = version.is_canary();
 
-    let download_file = interpolate_tokens(&platform.download_file, &version, &schema, &env);
+    let download_file = interpolate_tokens(&platform.download_file, version, &schema, &env);
 
     let download_url = interpolate_tokens(
         if is_canary {
@@ -232,7 +256,7 @@ pub fn download_prebuilt(
         } else {
             &schema.install.download_url
         },
-        &version,
+        version,
         &schema,
         &env,
     )
@@ -240,7 +264,7 @@ pub fn download_prebuilt(
 
     let checksum_file = interpolate_tokens(
         platform.checksum_file.as_deref().unwrap_or("CHECKSUM.txt"),
-        &version,
+        version,
         &schema,
         &env,
     );
@@ -256,13 +280,13 @@ pub fn download_prebuilt(
     };
 
     let checksum_url = checksum_url.map(|url| {
-        interpolate_tokens(url, &version, &schema, &env).replace("{checksum_file}", &checksum_file)
+        interpolate_tokens(url, version, &schema, &env).replace("{checksum_file}", &checksum_file)
     });
 
     let archive_prefix = platform
         .archive_prefix
         .as_ref()
-        .map(|prefix| interpolate_tokens(prefix, &version, &schema, &env));
+        .map(|prefix| interpolate_tokens(prefix, version, &schema, &env));
 
     Ok(Json(DownloadPrebuiltOutput {
         archive_prefix,
@@ -294,7 +318,6 @@ pub fn locate_executables(
     let env = get_host_environment()?;
     let schema = get_schema()?;
     let platform = get_platform(&schema, &env)?;
-    let version = input.context.version.to_string();
 
     // On Windows, automatically add the `.exe` extension to all executables.
     // But only if there is no extension, so that we don't overwrite `.js` and others!
@@ -324,7 +347,7 @@ pub fn locate_executables(
 
         primary.exe_path = Some(
             exe_path
-                .map(|s| interpolate_tokens(s, &version, &schema, &env))
+                .map(|s| interpolate_tokens(s, &input.context.version, &schema, &env))
                 .unwrap_or_else(|| env.os.get_exe_name(id))
                 .into(),
         );

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Added `{versionMajor}`, `{versionMajorMinor}`, `{versionYear}`, `{versionYearMonth}`, `{versionPrerelease}`, and `{versionBuild}` tokens.
+
 ## 0.15.0
 
 #### 🚀 Updates
