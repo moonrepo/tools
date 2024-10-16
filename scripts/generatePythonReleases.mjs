@@ -152,6 +152,7 @@ function processAssets(assets, releaseName, optLevel) {
 }
 
 const FILTER_WORDS = [
+  "freethreaded",
   "debug",
   "install_only",
   "msvc-static",
