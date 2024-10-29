@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+#### 💥 Breaking
+
+- Removed `platform.*.bin_path` support (use `install.exes` instead).
+- Deprecated `install.primary` and `install.secondary` (use `install.exes` instead).
+
+#### 🚀 Updates
+
+- Added `install.exes` for defining primary and secondary executables.
+
 ## 0.15.1
 
 #### 🚀 Updates

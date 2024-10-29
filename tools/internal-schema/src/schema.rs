@@ -10,11 +10,8 @@ pub struct PlatformMapper {
     pub archive_prefix: Option<String>,
     pub checksum_file: Option<String>,
     pub download_file: String,
-    pub exes_dir: Option<String>,
-    pub exe_path: Option<String>,
-
-    #[deprecated]
-    pub bin_path: Option<String>,
+    pub exes_dir: Option<PathBuf>,
+    pub exe_path: Option<PathBuf>,
 }
 
 #[derive(Debug, Default, Deserialize)]
@@ -33,6 +30,7 @@ pub struct ExecutableSchema {
     pub no_bin: bool,
     pub no_shim: bool,
     pub parent_exe_name: Option<String>,
+    pub primary: bool,
     pub shim_before_args: Option<Vec<String>>,
     pub shim_after_args: Option<Vec<String>>,
     pub shim_env_vars: Option<HashMap<String, String>>,
@@ -48,13 +46,16 @@ pub struct InstallSchema {
     pub checksum_url_canary: Option<String>,
     pub download_url: String,
     pub download_url_canary: Option<String>,
+    pub exes: HashMap<String, ExecutableSchema>,
 
     // Primary
+    #[deprecated]
     pub primary: Option<ExecutableSchema>,
     pub no_bin: Option<bool>,
     pub no_shim: Option<bool>,
 
     // Secondary
+    #[deprecated]
     pub secondary: HashMap<String, ExecutableSchema>,
 }
 

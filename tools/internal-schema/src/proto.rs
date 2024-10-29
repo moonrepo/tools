@@ -305,6 +305,7 @@ fn create_executable_config(schema: ExecutableSchema) -> ExecutableConfig {
         no_bin: schema.no_bin,
         no_shim: schema.no_shim,
         parent_exe_name: schema.parent_exe_name,
+        primary: false,
         shim_before_args: schema.shim_before_args.map(StringOrVec::Vec),
         shim_after_args: schema.shim_after_args.map(StringOrVec::Vec),
         shim_env_vars: schema.shim_env_vars.map(HashMap::from_iter),
@@ -318,6 +319,7 @@ pub fn locate_executables(
     let env = get_host_environment()?;
     let schema = get_schema()?;
     let platform = get_platform(&schema, &env)?;
+    let id = get_plugin_id()?;
 
     // On Windows, automatically add the `.exe` extension to all executables.
     // But only if there is no extension, so that we don't overwrite `.js` and others!
@@ -329,42 +331,40 @@ pub fn locate_executables(
         path
     };
 
-    // Primary exe
-    let mut primary = schema
-        .install
-        .primary
-        .clone()
-        .map(create_executable_config)
-        .unwrap_or_default();
+    let prepare_primary_exe = |config: &mut ExecutableConfig| {
+        config.primary = true;
 
-    #[allow(deprecated)]
-    let exe_path = platform.exe_path.as_ref().or(platform.bin_path.as_ref());
-
-    if exe_path.is_none() && primary.exe_path.is_some() {
-        primary.exe_path = Some(append_exe_ext(primary.exe_path.unwrap()));
-    } else {
-        let id = get_plugin_id()?;
-
-        primary.exe_path = Some(
-            exe_path
-                .map(|s| interpolate_tokens(s, &input.context.version, &schema, &env))
-                .unwrap_or_else(|| env.os.get_exe_name(id))
-                .into(),
+        let exe_path = append_exe_ext(
+            // Name from platform
+            platform
+                .exe_path
+                .as_ref()
+                // Name from config
+                .or(config.exe_path.as_ref())
+                // Name from plugin ID
+                .map_or_else(|| PathBuf::from(&id), |path| path.to_owned()),
         );
-    }
 
-    if let Some(no_bin) = schema.install.no_bin {
-        primary.no_bin = no_bin;
-    }
+        config.exe_path = Some(
+            interpolate_tokens(
+                exe_path.to_str().unwrap_or("<invalidpath>"),
+                &input.context.version,
+                &schema,
+                &env,
+            )
+            .into(),
+        );
 
-    if let Some(no_shim) = schema.install.no_shim {
-        primary.no_shim = no_shim;
-    }
+        if let Some(no_bin) = schema.install.no_bin {
+            config.no_bin = no_bin;
+        }
 
-    // Secondary exe's
-    let secondary = schema.install.secondary.iter().map(|(key, value)| {
-        let mut config = create_executable_config(value.to_owned());
+        if let Some(no_shim) = schema.install.no_shim {
+            config.no_shim = no_shim;
+        }
+    };
 
+    let prepare_secondary_exe = |config: &mut ExecutableConfig| {
         if let Some(exe_path) = config.exe_path.take() {
             config.exe_path = Some(append_exe_ext(exe_path));
         }
@@ -372,15 +372,60 @@ pub fn locate_executables(
         if let Some(exe_link_path) = config.exe_link_path.take() {
             config.exe_link_path = Some(append_exe_ext(exe_link_path));
         }
+    };
+
+    // Executables
+    let mut has_primary = false;
+    let mut exes = schema
+        .install
+        .exes
+        .iter()
+        .map(|(key, value)| {
+            let mut config = create_executable_config(value.to_owned());
+
+            if config.primary {
+                has_primary = true;
+                prepare_primary_exe(&mut config);
+            } else {
+                prepare_secondary_exe(&mut config);
+            }
+
+            (key.to_string(), config)
+        })
+        .collect::<HashMap<_, _>>();
+
+    // Primary & secondary exe's (deprecated)
+    #[allow(deprecated)]
+    let mut primary = schema
+        .install
+        .primary
+        .clone()
+        .map(create_executable_config)
+        .unwrap_or_default();
+
+    prepare_primary_exe(&mut primary);
+
+    if !has_primary {
+        exes.insert(id, primary.clone());
+    }
+
+    #[allow(deprecated)]
+    let secondary = schema.install.secondary.iter().map(|(key, value)| {
+        let mut config = create_executable_config(value.to_owned());
+
+        prepare_secondary_exe(&mut config);
 
         (key.to_string(), config)
     });
 
     Ok(Json(LocateExecutablesOutput {
+        exes: HashMap::from_iter(exes),
         exes_dir: platform.exes_dir.as_ref().map(PathBuf::from),
         globals_lookup_dirs: schema.packages.globals_lookup_dirs,
         globals_prefix: schema.packages.globals_prefix,
+        #[allow(deprecated)]
         primary: Some(primary),
+        #[allow(deprecated)]
         secondary: HashMap::from_iter(secondary),
     }))
 }
