@@ -4,6 +4,7 @@ use node_common::{NodeDistLTS, NodeDistVersion, VoltaField};
 use nodejs_package_json::PackageJson;
 use proto_pdk::*;
 use schematic::SchemaBuilder;
+use std::collections::HashMap;
 
 #[host_fn]
 extern "ExtismHost" {
@@ -11,7 +12,6 @@ extern "ExtismHost" {
 }
 
 static NAME: &str = "Node.js";
-static BIN: &str = "node";
 
 #[plugin_fn]
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
@@ -45,7 +45,7 @@ pub fn parse_version_file(
     if input.file == "package.json" {
         if let Ok(mut package_json) = json::from_str::<PackageJson>(&input.content) {
             if let Some(engines) = package_json.engines {
-                if let Some(constraint) = engines.get(BIN) {
+                if let Some(constraint) = engines.get("node") {
                     version = Some(UnresolvedVersionSpec::parse(constraint)?);
                 }
             }
@@ -236,17 +236,20 @@ pub fn locate_executables(
     let env = get_host_environment()?;
 
     Ok(Json(LocateExecutablesOutput {
-        exes_dir: Some(if env.os == HostOS::Windows {
+        exes: HashMap::from_iter([(
+            "node".into(),
+            ExecutableConfig::new_primary(if env.os.is_windows() {
+                "node.exe"
+            } else {
+                "bin/node"
+            }),
+        )]),
+        exes_dir: Some(if env.os.is_windows() {
             ".".into()
         } else {
             "bin".into()
         }),
         globals_lookup_dirs: vec!["$PROTO_HOME/tools/node/globals/bin".into()],
-        primary: Some(ExecutableConfig::new(if env.os == HostOS::Windows {
-            format!("{}.exe", BIN)
-        } else {
-            format!("bin/{}", BIN)
-        })),
         ..LocateExecutablesOutput::default()
     }))
 }

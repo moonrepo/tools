@@ -10,7 +10,6 @@ extern "ExtismHost" {
 }
 
 static NAME: &str = "Bun";
-static BIN: &str = "bun";
 
 #[plugin_fn]
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
@@ -125,7 +124,7 @@ pub fn locate_executables(
         // `bunx` isn't a real binary provided by Bun so we can't symlink it.
         // Instead, it's simply the `bun` binary named `bunx` and Bun toggles
         // functionality based on `args[0]`.
-        exe_link_path: Some(env.os.get_exe_name(BIN).into()),
+        exe_link_path: Some(env.os.get_exe_name("bun").into()),
 
         // The approach doesn't work for shims since we use child processes,
         // so execute `bun x` instead (notice the space).
@@ -135,12 +134,14 @@ pub fn locate_executables(
     };
 
     Ok(Json(LocateExecutablesOutput {
-        globals_lookup_dirs: vec!["$HOME/.bun/bin".into()],
-        primary: Some(ExecutableConfig::new(env.os.get_exe_name(BIN))),
-        secondary: HashMap::from_iter([
-            // bunx
+        exes: HashMap::from_iter([
+            (
+                "bun".into(),
+                ExecutableConfig::new_primary(env.os.get_exe_name("bun")),
+            ),
             ("bunx".into(), bunx),
         ]),
+        globals_lookup_dirs: vec!["$HOME/.bun/bin".into()],
         ..LocateExecutablesOutput::default()
     }))
 }

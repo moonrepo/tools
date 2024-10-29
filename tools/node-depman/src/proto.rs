@@ -280,7 +280,7 @@ pub fn locate_executables(
 ) -> FnResult<Json<LocateExecutablesOutput>> {
     let env = get_host_environment()?;
     let manager = PackageManager::detect()?;
-    let mut secondary = HashMap::default();
+    let mut secondary = HashMap::<String, ExecutableConfig>::default();
     let mut primary;
 
     // These are the directories that contain the executable binaries,
@@ -295,6 +295,7 @@ pub fn locate_executables(
     match &manager {
         PackageManager::Npm => {
             primary = ExecutableConfig::with_parent("bin/npm-cli.js", "node");
+            primary.primary = true;
             primary.no_bin = true;
 
             // npx
@@ -317,6 +318,7 @@ pub fn locate_executables(
         }
         PackageManager::Pnpm => {
             primary = ExecutableConfig::with_parent("bin/pnpm.cjs", "node");
+            primary.primary = true;
             primary.no_bin = true;
 
             // pnpx
@@ -344,6 +346,7 @@ pub fn locate_executables(
         }
         PackageManager::Yarn => {
             primary = ExecutableConfig::with_parent("bin/yarn.js", "node");
+            primary.primary = true;
             primary.no_bin = true;
 
             // yarnpkg
@@ -366,11 +369,13 @@ pub fn locate_executables(
         globals_lookup_dirs.push("$PROTO_HOME/tools/node/globals/bin".into());
     }
 
+    let mut exes = HashMap::from_iter([(manager.to_string(), primary)]);
+    exes.extend(secondary);
+
     Ok(Json(LocateExecutablesOutput {
+        exes,
         exes_dir: Some(".".into()),
         globals_lookup_dirs,
-        primary: Some(primary),
-        secondary,
         ..LocateExecutablesOutput::default()
     }))
 }

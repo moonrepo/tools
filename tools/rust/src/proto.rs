@@ -2,6 +2,7 @@ use crate::helpers::*;
 use crate::toolchain_toml::ToolchainToml;
 use extism_pdk::*;
 use proto_pdk::*;
+use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
 
@@ -213,11 +214,12 @@ pub fn locate_executables(
     // Binaries are provided by Cargo (`~/.cargo/bin`), so don't create
     // our own shim and bin. But we do need to ensure that the install
     // worked, so we still check for the `cargo` binary.
-    let mut primary = ExecutableConfig::new(env.os.get_exe_name("bin/cargo"));
+    let mut primary = ExecutableConfig::new_primary(env.os.get_exe_name("bin/cargo"));
     primary.no_bin = true;
     primary.no_shim = true;
 
     Ok(Json(LocateExecutablesOutput {
+        exes: HashMap::from_iter([("cargo".into(), primary)]),
         exes_dir: Some("bin".into()),
         globals_lookup_dirs: vec![
             "$CARGO_INSTALL_ROOT/bin".into(),
@@ -225,7 +227,6 @@ pub fn locate_executables(
             "$HOME/.cargo/bin".into(),
         ],
         globals_prefix: Some("cargo-".into()),
-        primary: Some(primary),
         ..LocateExecutablesOutput::default()
     }))
 }

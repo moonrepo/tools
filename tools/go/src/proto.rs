@@ -11,7 +11,6 @@ extern "ExtismHost" {
 }
 
 static NAME: &str = "Go";
-static BIN: &str = "go";
 
 #[plugin_fn]
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
@@ -137,19 +136,22 @@ pub fn locate_executables(
     let env = get_host_environment()?;
 
     Ok(Json(LocateExecutablesOutput {
+        exes: HashMap::from_iter([
+            (
+                "go".into(),
+                ExecutableConfig::new_primary(env.os.get_exe_name("bin/go")),
+            ),
+            (
+                "gofmt".into(),
+                ExecutableConfig::new(env.os.get_exe_name("bin/gofmt")),
+            ),
+        ]),
         globals_lookup_dirs: vec![
             "$GOBIN".into(),
             "$GOROOT/bin".into(),
             "$GOPATH/bin".into(),
             "$HOME/go/bin".into(),
         ],
-        primary: Some(ExecutableConfig::new(
-            env.os.get_exe_name(format!("bin/{}", BIN)),
-        )),
-        secondary: HashMap::from_iter([(
-            "gofmt".into(),
-            ExecutableConfig::new(env.os.get_exe_name("bin/gofmt")),
-        )]),
         ..LocateExecutablesOutput::default()
     }))
 }

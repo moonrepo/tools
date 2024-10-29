@@ -1,5 +1,13 @@
 # Changelog
 
+#### 💥 Breaking
+
+- Removed `python<major>` and `pip<major>` executables. Use the new proto bins feature instead.
+
+#### 🚀 Updates
+
+- Added `~/.local/bin` as a globals lookup directory.
+
 ## 0.11.0
 
 #### 🚀 Updates
