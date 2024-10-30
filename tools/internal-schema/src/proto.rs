@@ -418,14 +418,13 @@ pub fn locate_executables(
         (key.to_string(), config)
     });
 
+    #[allow(deprecated)]
     Ok(Json(LocateExecutablesOutput {
         exes: HashMap::from_iter(exes),
         exes_dir: platform.exes_dir.as_ref().map(PathBuf::from),
         globals_lookup_dirs: schema.packages.globals_lookup_dirs,
         globals_prefix: schema.packages.globals_prefix,
-        #[allow(deprecated)]
         primary: Some(primary),
-        #[allow(deprecated)]
         secondary: HashMap::from_iter(secondary),
     }))
 }

@@ -10,6 +10,7 @@
 #### 🚀 Updates
 
 - Added `install.exes` for defining primary and secondary executables.
+- Updated to support proto v0.42 release.
 
 ## 0.15.1
 
