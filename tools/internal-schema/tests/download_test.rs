@@ -218,7 +218,8 @@ async fn locates_linux_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("schema-test")
             .unwrap()
             .exe_path,
         Some("lin/moon".into())
@@ -247,7 +248,8 @@ async fn locates_macos_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("schema-test")
             .unwrap()
             .exe_path,
         Some("mac/moon".into())
@@ -276,7 +278,8 @@ async fn locates_windows_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("schema-test")
             .unwrap()
             .exe_path,
         Some("win/moon.exe".into())
@@ -299,16 +302,16 @@ mod primary {
             )
             .await;
 
-        let config = plugin
+        let result = plugin
             .locate_executables(LocateExecutablesInput {
                 context: ToolContext {
                     version: VersionSpec::parse("20.0.0").unwrap(),
                     ..Default::default()
                 },
             })
-            .await
-            .primary
-            .unwrap();
+            .await;
+
+        let config = result.exes.get("schema-test").unwrap();
 
         assert_eq!(config.exe_path, Some("bin/moon".into()));
         assert!(config.no_shim);
@@ -340,7 +343,8 @@ mod primary {
                     },
                 })
                 .await
-                .primary
+                .exes
+                .get("schema-test")
                 .unwrap()
                 .exe_path,
             Some("bin/moon.exe".into())
@@ -369,7 +373,8 @@ mod primary {
                     },
                 })
                 .await
-                .primary
+                .exes
+                .get("schema-test")
                 .unwrap()
                 .exe_path,
             Some("lin/moon".into())
@@ -393,21 +398,20 @@ mod secondary {
             )
             .await;
 
-        let secondary = plugin
+        let result = plugin
             .locate_executables(LocateExecutablesInput {
                 context: ToolContext {
                     version: VersionSpec::parse("20.0.0").unwrap(),
                     ..Default::default()
                 },
             })
-            .await
-            .secondary;
+            .await;
 
-        let foo = secondary.get("foo").unwrap();
+        let foo = result.exes.get("foo").unwrap();
 
         assert_eq!(foo.exe_path, Some("bin/foo".into()));
 
-        let bar = secondary.get("bar").unwrap();
+        let bar = result.exes.get("bar").unwrap();
 
         assert_eq!(bar.exe_path, Some("bin/bar".into()));
         assert!(bar.no_bin);
@@ -416,13 +420,13 @@ mod secondary {
             Some(HashMap::from_iter([("BAR".into(), "bar".into())]))
         );
 
-        let baz = secondary.get("baz").unwrap();
+        let baz = result.exes.get("baz").unwrap();
 
         assert_eq!(baz.exe_path, Some("bin/baz".into()));
         assert_eq!(baz.exe_link_path, Some("bin/baz-link".into()));
         assert!(baz.no_shim);
 
-        let qux = secondary.get("qux").unwrap();
+        let qux = result.exes.get("qux").unwrap();
 
         assert_eq!(qux.exe_path, Some("bin/qux.js".into()));
         assert_eq!(qux.parent_exe_name, Some("node".into()));
@@ -441,30 +445,29 @@ mod secondary {
             )
             .await;
 
-        let secondary = plugin
+        let result = plugin
             .locate_executables(LocateExecutablesInput {
                 context: ToolContext {
                     version: VersionSpec::parse("20.0.0").unwrap(),
                     ..Default::default()
                 },
             })
-            .await
-            .secondary;
+            .await;
 
         assert_eq!(
-            secondary.get("foo").unwrap().exe_path,
+            result.exes.get("foo").unwrap().exe_path,
             Some("bin/foo.exe".into())
         );
         assert_eq!(
-            secondary.get("bar").unwrap().exe_path,
+            result.exes.get("bar").unwrap().exe_path,
             Some("bin/bar.exe".into())
         );
         assert_eq!(
-            secondary.get("baz").unwrap().exe_path,
+            result.exes.get("baz").unwrap().exe_path,
             Some("bin/baz.exe".into())
         );
         assert_eq!(
-            secondary.get("qux").unwrap().exe_path,
+            result.exes.get("qux").unwrap().exe_path,
             Some("bin/qux.js".into())
         );
     }

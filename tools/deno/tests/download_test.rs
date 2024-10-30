@@ -196,7 +196,8 @@ async fn locates_unix_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("deno")
             .unwrap()
             .exe_path,
         Some("deno".into())
@@ -221,7 +222,8 @@ async fn locates_windows_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("deno")
             .unwrap()
             .exe_path,
         Some("deno.exe".into())

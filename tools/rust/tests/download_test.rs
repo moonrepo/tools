@@ -21,7 +21,8 @@ async fn locates_linux_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("cargo")
             .unwrap()
             .exe_path,
         Some("bin/cargo".into())
@@ -46,7 +47,8 @@ async fn locates_macos_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("cargo")
             .unwrap()
             .exe_path,
         Some("bin/cargo".into())
@@ -71,7 +73,8 @@ async fn locates_windows_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("cargo")
             .unwrap()
             .exe_path,
         Some("bin/cargo.exe".into())

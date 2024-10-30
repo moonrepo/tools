@@ -361,7 +361,8 @@ async fn locates_unix_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("node")
             .unwrap()
             .exe_path,
         Some("bin/node".into())
@@ -386,7 +387,8 @@ async fn locates_windows_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("node")
             .unwrap()
             .exe_path,
         Some("node.exe".into())

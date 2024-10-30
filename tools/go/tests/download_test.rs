@@ -194,7 +194,8 @@ async fn locates_unix_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("go")
             .unwrap()
             .exe_path,
         Some("bin/go".into())
@@ -219,7 +220,8 @@ async fn locates_windows_bin() {
                 },
             })
             .await
-            .primary
+            .exes
+            .get("go")
             .unwrap()
             .exe_path,
         Some("bin/go.exe".into())
