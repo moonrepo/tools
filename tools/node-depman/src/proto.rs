@@ -7,11 +7,14 @@ use nodejs_package_json::PackageJson;
 use proto_pdk::*;
 use schematic::SchemaBuilder;
 use std::collections::HashMap;
+use std::fs;
+use std::path::Path;
 
 #[host_fn]
 extern "ExtismHost" {
     fn exec_command(input: Json<ExecCommandInput>) -> Json<ExecCommandOutput>;
     fn get_env_var(key: &str) -> String;
+    fn to_virtual_path(input: String) -> String;
 }
 
 #[plugin_fn]
@@ -41,6 +44,43 @@ pub fn detect_version_files(_: ()) -> FnResult<Json<DetectVersionOutput>> {
     }))
 }
 
+fn parse_volta_version_from_package(
+    manager_name: &str,
+    package_path: &Path,
+    package_json: &PackageJson,
+) -> AnyResult<Option<UnresolvedVersionSpec>> {
+    if let Some(volta_raw) = package_json.other_fields.get("volta") {
+        let volta: VoltaField = json::from_value(volta_raw.to_owned())?;
+
+        if let Some(volta_tool_version) = match manager_name {
+            "npm" => volta.npm,
+            "pnpm" => volta.pnpm,
+            "yarn" => volta.yarn,
+            _ => None,
+        } {
+            return Ok(Some(UnresolvedVersionSpec::parse(volta_tool_version)?));
+        }
+
+        if let Some(extends_from) = volta.extends {
+            let extends_path = package_path.parent().unwrap().join(extends_from);
+
+            if extends_path.exists() && extends_path.is_file() {
+                let content = fs::read_to_string(&extends_path)?;
+
+                if let Ok(package_json) = json::from_str::<PackageJson>(&content) {
+                    return parse_volta_version_from_package(
+                        manager_name,
+                        &extends_path,
+                        &package_json,
+                    );
+                }
+            }
+        }
+    }
+
+    Ok(None)
+}
+
 #[plugin_fn]
 pub fn parse_version_file(
     Json(input): Json<ParseVersionFileInput>,
@@ -48,10 +88,10 @@ pub fn parse_version_file(
     let mut version = None;
 
     if input.file == "package.json" {
-        if let Ok(mut package_json) = json::from_str::<PackageJson>(&input.content) {
+        if let Ok(package_json) = json::from_str::<PackageJson>(&input.content) {
             let manager_name = PackageManager::detect()?.to_string();
 
-            if let Some(pm) = package_json.package_manager {
+            if let Some(pm) = &package_json.package_manager {
                 let mut parts = pm.split('@');
                 let name = parts.next().unwrap_or_default();
 
@@ -72,24 +112,17 @@ pub fn parse_version_file(
             }
 
             if version.is_none() {
-                if let Some(engines) = package_json.engines {
-                    if let Some(constraint) = engines.get(&manager_name) {
-                        version = Some(UnresolvedVersionSpec::parse(constraint)?);
-                    }
-                }
+                version = parse_volta_version_from_package(
+                    &manager_name,
+                    input.path.any_path(),
+                    &package_json,
+                )?;
             }
 
             if version.is_none() {
-                if let Some(volta_raw) = package_json.other_fields.remove("volta") {
-                    let volta: VoltaField = json::from_value(volta_raw)?;
-
-                    if let Some(volta_tool_version) = match manager_name.as_str() {
-                        "npm" => volta.npm,
-                        "pnpm" => volta.pnpm,
-                        "yarn" => volta.yarn,
-                        _ => None,
-                    } {
-                        version = Some(UnresolvedVersionSpec::parse(volta_tool_version)?);
+                if let Some(engines) = package_json.engines {
+                    if let Some(constraint) = engines.get(&manager_name) {
+                        version = Some(UnresolvedVersionSpec::parse(constraint)?);
                     }
                 }
             }
@@ -337,9 +370,9 @@ pub fn locate_executables(
             // https://github.com/pnpm/pnpm/blob/main/config/config/src/dirs.ts#L40
             globals_lookup_dirs.push("$PNPM_HOME".into());
 
-            if env.os == HostOS::Windows {
+            if env.os.is_windows() {
                 globals_lookup_dirs.push("$LOCALAPPDATA\\pnpm".into());
-            } else if env.os == HostOS::MacOS {
+            } else if env.os.is_mac() {
                 globals_lookup_dirs.push("$HOME/Library/pnpm".into());
             } else {
                 globals_lookup_dirs.push("$HOME/.local/share/pnpm".into());
@@ -354,7 +387,7 @@ pub fn locate_executables(
             secondary.insert("yarnpkg".into(), primary.clone());
 
             // https://github.com/yarnpkg/yarn/blob/master/src/cli/commands/global.js#L84
-            if env.os == HostOS::Windows {
+            if env.os.is_windows() {
                 globals_lookup_dirs.push("$LOCALAPPDATA\\Yarn\\bin".into());
                 globals_lookup_dirs.push("$HOME\\.yarn\\bin".into());
             } else {
@@ -431,7 +464,7 @@ pub fn pre_run(Json(input): Json<RunHook>) -> FnResult<Json<RunHookResult>> {
                     // while Windows installs directly into the /bin directory.
                     .insert(
                         "PREFIX".into(),
-                        if env.os == HostOS::Windows {
+                        if env.os.is_windows() {
                             globals_bin_dir
                         } else {
                             globals_root_dir

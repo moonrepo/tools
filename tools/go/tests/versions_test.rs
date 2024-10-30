@@ -46,6 +46,7 @@ require (
 )"#
             .into(),
             file: "go.mod".into(),
+            ..Default::default()
         })
         .await;
 
@@ -70,6 +71,7 @@ require (
 )"#
             .into(),
             file: "go.mod".into(),
+            ..Default::default()
         })
         .await;
 
@@ -92,6 +94,7 @@ use (
 )"#
             .into(),
             file: "go.work".into(),
+            ..Default::default()
         })
         .await;
 
@@ -115,6 +118,7 @@ use (
 )"#
             .into(),
             file: "go.work".into(),
+            ..Default::default()
         })
         .await;
 

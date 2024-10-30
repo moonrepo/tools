@@ -40,6 +40,7 @@ async fn parses_rust_toolchain() {
             .parse_version_file(ParseVersionFileInput {
                 content: "1.60.0".into(),
                 file: "rust-toolchain".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput {
@@ -58,6 +59,7 @@ async fn ignores_empty_rust_toolchain() {
             .parse_version_file(ParseVersionFileInput {
                 content: "".into(),
                 file: "rust-toolchain".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput { version: None }
@@ -74,6 +76,7 @@ async fn parses_rust_toolchain_toml() {
             .parse_version_file(ParseVersionFileInput {
                 content: "[toolchain]\nchannel = \"1.70.0\"".into(),
                 file: "rust-toolchain.toml".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput {
@@ -92,6 +95,7 @@ async fn ignores_empty_rust_toolchain_toml() {
             .parse_version_file(ParseVersionFileInput {
                 content: "[toolchain]".into(),
                 file: "rust-toolchain.toml".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput { version: None }

@@ -59,6 +59,7 @@ async fn parses_engines() {
             .parse_version_file(ParseVersionFileInput {
                 content: r#"{ "engines": { "node": ">=16" } }"#.into(),
                 file: "package.json".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput {
@@ -77,6 +78,7 @@ async fn parses_volta() {
             .parse_version_file(ParseVersionFileInput {
                 content: r#"{ "volta": { "node": "16.20.2" } }"#.into(),
                 file: "package.json".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput {
@@ -95,6 +97,7 @@ async fn parses_nvmrc() {
             .parse_version_file(ParseVersionFileInput {
                 content: "~20".into(),
                 file: ".nvmrc".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput {
@@ -113,6 +116,7 @@ async fn parses_nvmrc_with_comment() {
             .parse_version_file(ParseVersionFileInput {
                 content: "# comment\n^20.1".into(),
                 file: ".nvmrc".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput {
@@ -131,6 +135,7 @@ async fn parses_node_version() {
             .parse_version_file(ParseVersionFileInput {
                 content: "~20".into(),
                 file: ".node-version".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput {
@@ -149,6 +154,7 @@ async fn parses_node_version_with_comment() {
             .parse_version_file(ParseVersionFileInput {
                 content: "# comment\n^20.1".into(),
                 file: ".node-version".into(),
+                ..Default::default()
             })
             .await,
         ParseVersionFileOutput {

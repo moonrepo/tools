@@ -73,7 +73,7 @@ pub fn download_prebuilt(
 
     let mut avx2_suffix = "";
 
-    if env.arch == HostArch::X64 && env.os == HostOS::Linux && command_exists(&env, "grep") {
+    if env.arch == HostArch::X64 && env.os.is_linux() && command_exists(&env, "grep") {
         let output = exec_command!("grep", ["avx2", "/proc/cpuinfo"]);
 
         if output.exit_code != 0 {
