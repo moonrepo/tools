@@ -9,7 +9,7 @@ async fn registers_metadata() {
         plugin.register_tool(ToolMetadataInput::default()).await,
         ToolMetadataOutput {
             name: "Python".into(),
-            plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
+            plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
             ..ToolMetadataOutput::default()
         }
     );

@@ -8,5 +8,8 @@ async fn registers_metadata() {
     let metadata = plugin.register_tool(ToolMetadataInput::default()).await;
 
     assert_eq!(metadata.name, "Node.js");
-    assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
+    assert_eq!(
+        metadata.plugin_version.unwrap().to_string(),
+        env!("CARGO_PKG_VERSION")
+    );
 }

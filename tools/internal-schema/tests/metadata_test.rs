@@ -13,7 +13,7 @@ async fn registers_metadata() {
         ToolMetadataOutput {
             name: "moon-test".into(),
             type_of: PluginType::CommandLine,
-            plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
+            plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
             ..ToolMetadataOutput::default()
         }
     );

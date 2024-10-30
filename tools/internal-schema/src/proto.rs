@@ -47,7 +47,9 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
             SchemaType::Language => PluginType::Language,
             SchemaType::VersionManager => PluginType::VersionManager,
         },
-        plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
+        // Enable after we remove primary/secondary
+        // minimum_proto_version: Some(Version::new(0, 42, 0)),
+        plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
         self_upgrade_commands: schema.metadata.self_upgrade_commands,
         ..ToolMetadataOutput::default()
     }))

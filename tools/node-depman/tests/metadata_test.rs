@@ -16,7 +16,10 @@ mod npm {
 
         assert_eq!(metadata.name, "npm");
         assert_eq!(metadata.type_of, PluginType::DependencyManager);
-        assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
+        assert_eq!(
+            metadata.plugin_version.unwrap().to_string(),
+            env!("CARGO_PKG_VERSION")
+        );
     }
 }
 
@@ -32,7 +35,10 @@ mod pnpm {
 
         assert_eq!(metadata.name, "pnpm");
         assert_eq!(metadata.type_of, PluginType::DependencyManager);
-        assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
+        assert_eq!(
+            metadata.plugin_version.unwrap().to_string(),
+            env!("CARGO_PKG_VERSION")
+        );
     }
 }
 
@@ -48,6 +54,9 @@ mod yarn {
 
         assert_eq!(metadata.name, "yarn");
         assert_eq!(metadata.type_of, PluginType::DependencyManager);
-        assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
+        assert_eq!(
+            metadata.plugin_version.unwrap().to_string(),
+            env!("CARGO_PKG_VERSION")
+        );
     }
 }

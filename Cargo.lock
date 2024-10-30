@@ -2150,8 +2150,6 @@ dependencies = [
 [[package]]
 name = "proto_core"
 version = "0.43.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c875badbc4e6eb7f60fddb26d821fef68b0636f4879eaf2bf53e72cece5dd2e7"
 dependencies = [
  "convert_case",
  "indexmap",
@@ -2183,8 +2181,6 @@ dependencies = [
 [[package]]
 name = "proto_pdk"
 version = "0.25.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6445d53121e19bea768a8b44f5bad18d3701fdba1359e4c0f539a08cf01ed8d3"
 dependencies = [
  "extism-pdk",
  "proto_pdk_api",
@@ -2196,8 +2192,6 @@ dependencies = [
 [[package]]
 name = "proto_pdk_api"
 version = "0.24.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a1ef38b2ccceb6cc18dc33d58a679903c6434845e298295abe4eaaf42f8e4d7"
 dependencies = [
  "rustc-hash 2.0.0",
  "schematic",
@@ -2213,8 +2207,6 @@ dependencies = [
 [[package]]
 name = "proto_pdk_test_utils"
 version = "0.30.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a019e2693afb68ec3fb8130e4c3b2e508e94f3a89468d9c5f2107d9a7319c599"
 dependencies = [
  "proto_core",
  "proto_pdk_api",
@@ -2227,8 +2219,6 @@ dependencies = [
 [[package]]
 name = "proto_shim"
 version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d5eba553bde4d4d934bd8755167c7ef20bfed088e87ca28759f01a0aa5a3b26"
 dependencies = [
  "command-group",
  "dirs 5.0.1",
@@ -2451,9 +2441,9 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 
 [[package]]
 name = "reqwest"
-version = "0.12.8"
+version = "0.12.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f713147fbe92361e52392c73b8c9e48c04c6625bce969ef54dc901e58e042a7b"
+checksum = "a77c62af46e79de0a562e1a9849205ffcb7fc1238876e9bd743357570e04046f"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -3162,8 +3152,6 @@ dependencies = [
 [[package]]
 name = "system_env"
 version = "0.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1303c37a9842bba9d6ec7725d2e73b13dbca214bbf9a5a9219da59115047ff06"
 dependencies = [
  "schematic",
  "serde",
@@ -3524,9 +3512,9 @@ dependencies = [
 
 [[package]]
 name = "uuid"
-version = "1.10.0"
+version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81dfa00651efa65069b0b6b651f4aaa31ba9e3c3ce0137aaad053604ee7e0314"
+checksum = "f8c5f0a0af699448548ad1a2fbf920fb4bee257eae39953ba95cb84891a0446a"
 dependencies = [
  "getrandom",
 ]
@@ -3546,8 +3534,6 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 [[package]]
 name = "version_spec"
 version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a8115efd6e9e71ef4f9b71169432fe99b042d435cd80e41314d3d869dab2d33"
 dependencies = [
  "human-sort",
  "regex",
@@ -3588,8 +3574,6 @@ dependencies = [
 [[package]]
 name = "warpgate"
 version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1535c4efe7dc603dd356dfdd5be0060bae81e29413bb9116d3b87bdaef9f6935"
 dependencies = [
  "extism",
  "miette",
@@ -3615,8 +3599,6 @@ dependencies = [
 [[package]]
 name = "warpgate_api"
 version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a122a35bbc9d72d386d44fcf5685dc1083d65755168108c9ecd08b8913580dfc"
 dependencies = [
  "anyhow",
  "rustc-hash 2.0.0",
@@ -3630,8 +3612,6 @@ dependencies = [
 [[package]]
 name = "warpgate_pdk"
 version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2b23ffd7947eb4886375e93104849ec7aec35ff8c4aefeae2d31cab4d0ff46e5"
 dependencies = [
  "extism-pdk",
  "serde",
