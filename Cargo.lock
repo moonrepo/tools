@@ -2149,9 +2149,9 @@ dependencies = [
 
 [[package]]
 name = "proto_core"
-version = "0.43.2"
+version = "0.43.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec2ba47fe6f9e1528ee5cd60c1f0a02a089e9c51c570951a88aa7b509fd385ba"
+checksum = "f1078089763238a57062792b85eaa0487794387f923c341b6598140a92faa1b6"
 dependencies = [
  "convert_case",
  "indexmap",
