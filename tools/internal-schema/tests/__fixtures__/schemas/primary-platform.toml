@@ -3,13 +3,13 @@ name = "moon-test"
 type = "cli"
 
 [platform.linux]
-bin-path = "lin/moon"
+exe-path = "lin/moon"
 
 [platform.macos]
-bin-path = "mac/moon"
+exe-path = "mac/moon"
 
 [platform.windows]
-bin-path = "win/moon.exe"
+exe-path = "win/moon.exe"
 
 [install.primary]
 exe-path = "bin/moon"

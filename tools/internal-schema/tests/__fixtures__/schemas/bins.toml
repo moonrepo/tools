@@ -4,17 +4,17 @@ type = "cli"
 
 [platform.linux]
 archive-prefix = "moon-linux-{arch}-{version}"
-bin-path = "lin/moon"
 download-file = "moon-{arch}-unknown-linux-gnu"
+exe-path = "lin/moon"
 
 [platform.macos]
-bin-path = "mac/moon"
 checksum-file = "SHASUM256.txt"
 download-file = "moon-{arch}-apple-darwin"
+exe-path = "mac/moon"
 
 [platform.windows]
-bin-path = "win/moon.exe"
 download-file = "moon-{arch}-pc-windows-msvc.exe"
+exe-path = "win/moon.exe"
 
 [install]
 download-url = "https://github.com/moonrepo/moon/releases/download/v{version}/{download_file}"
