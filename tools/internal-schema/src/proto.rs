@@ -397,36 +397,36 @@ pub fn locate_executables(
         .collect::<HashMap<_, _>>();
 
     // Primary & secondary exe's (deprecated)
-    #[allow(deprecated)]
-    let mut primary = schema
-        .install
-        .primary
-        .clone()
-        .map(create_executable_config)
-        .unwrap_or_default();
-
-    prepare_primary_exe(&mut primary);
-
     if !has_primary {
+        #[allow(deprecated)]
+        let mut primary = schema
+            .install
+            .primary
+            .clone()
+            .map(create_executable_config)
+            .unwrap_or_default();
+
+        prepare_primary_exe(&mut primary);
+
         exes.insert(id, primary.clone());
     }
 
     #[allow(deprecated)]
-    let secondary = schema.install.secondary.iter().map(|(key, value)| {
-        let mut config = create_executable_config(value.to_owned());
+    schema.install.secondary.iter().for_each(|(key, value)| {
+        exes.entry(key.to_owned()).or_insert_with(|| {
+            let mut config = create_executable_config(value.to_owned());
 
-        prepare_secondary_exe(&mut config);
+            prepare_secondary_exe(&mut config);
 
-        (key.to_string(), config)
+            config
+        });
     });
 
-    #[allow(deprecated)]
     Ok(Json(LocateExecutablesOutput {
         exes: HashMap::from_iter(exes),
         exes_dir: platform.exes_dir.as_ref().map(PathBuf::from),
         globals_lookup_dirs: schema.packages.globals_lookup_dirs,
         globals_prefix: schema.packages.globals_prefix,
-        primary: Some(primary),
-        secondary: HashMap::from_iter(secondary),
+        ..Default::default()
     }))
 }
