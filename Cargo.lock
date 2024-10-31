@@ -2212,9 +2212,9 @@ dependencies = [
 
 [[package]]
 name = "proto_pdk_test_utils"
-version = "0.30.2"
+version = "0.30.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "34e2bb1a1027c0efbd212a648754587c245f81b2264d9faacf2d4e286c087dd3"
+checksum = "fd91fdaa41be560f8b938224912c222bd4e643e9c1dfe271969f42d91b7b3fc2"
 dependencies = [
  "proto_core",
  "proto_pdk_api",

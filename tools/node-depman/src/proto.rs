@@ -384,7 +384,13 @@ pub fn locate_executables(
             primary.no_bin = true;
 
             // yarnpkg
-            secondary.insert("yarnpkg".into(), primary.clone());
+            secondary.insert(
+                "yarnpkg".into(),
+                ExecutableConfig {
+                    primary: false,
+                    ..primary.clone()
+                },
+            );
 
             // https://github.com/yarnpkg/yarn/blob/master/src/cli/commands/global.js#L84
             if env.os.is_windows() {

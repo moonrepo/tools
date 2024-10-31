@@ -44,7 +44,7 @@ async fn sets_lts_aliases() {
         aliases,
         [
             "argon", "boron", "carbon", "dubnium", "erbium", "fermium", "gallium", "hydrogen",
-            "iron", "latest", "stable"
+            "iron", "jod", "latest", "stable"
         ]
     );
 }
