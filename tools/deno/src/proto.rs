@@ -2,6 +2,7 @@ use crate::config::DenoPluginConfig;
 use extism_pdk::*;
 use proto_pdk::*;
 use schematic::SchemaBuilder;
+use std::collections::HashMap;
 
 #[host_fn]
 extern "ExtismHost" {
@@ -9,7 +10,6 @@ extern "ExtismHost" {
 }
 
 static NAME: &str = "Deno";
-static BIN: &str = "deno";
 
 #[plugin_fn]
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
@@ -17,7 +17,8 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
         name: NAME.into(),
         type_of: PluginType::Language,
         config_schema: Some(SchemaBuilder::build_root::<DenoPluginConfig>()),
-        plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
+        minimum_proto_version: Some(Version::new(0, 42, 0)),
+        plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
         self_upgrade_commands: vec!["upgrade".into()],
         ..ToolMetadataOutput::default()
     }))
@@ -105,12 +106,15 @@ pub fn locate_executables(
     let env = get_host_environment()?;
 
     Ok(Json(LocateExecutablesOutput {
+        exes: HashMap::from_iter([(
+            "deno".into(),
+            ExecutableConfig::new_primary(env.os.get_exe_name("deno")),
+        )]),
         globals_lookup_dirs: vec![
             "$DENO_INSTALL_ROOT/bin".into(),
             "$DENO_HOME/bin".into(),
             "$HOME/.deno/bin".into(),
         ],
-        primary: Some(ExecutableConfig::new(env.os.get_exe_name(BIN))),
         ..LocateExecutablesOutput::default()
     }))
 }

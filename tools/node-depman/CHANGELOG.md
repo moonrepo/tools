@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Added support for `volta.extends`: https://docs.volta.sh/advanced/workspaces
+- Updated `volta` to take precedence over `engines` in `package.json`.
+- Updated to support proto v0.42 release.
+
 ## 0.13.1
 
 #### 🚀 Updates

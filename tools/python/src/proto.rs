@@ -17,7 +17,7 @@ static NAME: &str = "Python";
 #[derive(Deserialize)]
 struct PythonManifest {
     python_exe: String,
-    python_major_minor_version: String,
+    // python_major_minor_version: String,
     python_paths: HashMap<String, String>,
 }
 
@@ -26,7 +26,8 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
     Ok(Json(ToolMetadataOutput {
         name: NAME.into(),
         type_of: PluginType::Language,
-        plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
+        minimum_proto_version: Some(Version::new(0, 42, 0)),
+        plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
         ..ToolMetadataOutput::default()
     }))
 }
@@ -141,7 +142,6 @@ pub fn locate_executables(
     Json(input): Json<LocateExecutablesInput>,
 ) -> FnResult<Json<LocateExecutablesOutput>> {
     let env = get_host_environment()?;
-    let id = get_plugin_id()?;
     let mut exe_path = env
         .os
         .for_native("install/bin/python", "install/python.exe")
@@ -150,7 +150,6 @@ pub fn locate_executables(
         .os
         .for_native("install/bin", "install/Scripts")
         .to_owned();
-    let mut major_version = "3".to_owned();
 
     // Manifest is only available for pre-builts
     let manifest_path = input.context.tool_dir.join("PYTHON.json");
@@ -163,49 +162,22 @@ pub fn locate_executables(
         if let Some(dir) = manifest.python_paths.get("scripts") {
             dir.clone_into(&mut exes_dir);
         }
-
-        if let Some(index) = manifest.python_major_minor_version.find('.') {
-            major_version = manifest.python_major_minor_version[0..index].to_string();
-        }
     }
-    // Otherwise this was built from source
-    else if let Some(version) = input.context.version.as_version() {
-        major_version = version.major.to_string();
-    }
-
-    // Create a secondary executable that includes the major version as a suffix
-    // https://gregoryszorc.com/docs/python-build-standalone/main/quirks.html#no-pip-exe-on-windows
-    let secondary = HashMap::from_iter([
-        // python3
-        (
-            format!("{id}{major_version}"),
-            ExecutableConfig::new(&exe_path),
-        ),
-        // pip
-        (
-            "pip".into(),
-            ExecutableConfig {
-                no_bin: true,
-                shim_before_args: Some(StringOrVec::Vec(vec!["-m".into(), "pip".into()])),
-                ..ExecutableConfig::default()
-            },
-        ),
-        // pip3
-        (
-            format!("pip{major_version}"),
-            ExecutableConfig {
-                no_bin: true,
-                shim_before_args: Some(StringOrVec::Vec(vec!["-m".into(), "pip".into()])),
-                ..ExecutableConfig::default()
-            },
-        ),
-    ]);
 
     Ok(Json(LocateExecutablesOutput {
-        globals_lookup_dirs: vec![format!("$TOOL_DIR/{exes_dir}")],
+        globals_lookup_dirs: vec![format!("$TOOL_DIR/{exes_dir}"), "$HOME/.local/bin".into()],
+        exes: HashMap::from_iter([
+            ("python".into(), ExecutableConfig::new_primary(exe_path)),
+            (
+                "pip".into(),
+                ExecutableConfig {
+                    no_bin: true,
+                    shim_before_args: Some(StringOrVec::Vec(vec!["-m".into(), "pip".into()])),
+                    ..ExecutableConfig::default()
+                },
+            ),
+        ]),
         exes_dir: Some(exes_dir.into()),
-        primary: Some(ExecutableConfig::new(exe_path)),
-        secondary,
         ..LocateExecutablesOutput::default()
     }))
 }

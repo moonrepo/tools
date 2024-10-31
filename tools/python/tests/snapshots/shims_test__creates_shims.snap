@@ -1,6 +1,6 @@
 ---
-source: tests/shims_test.rs
-expression: "std::fs::read_to_string(sandbox.path().join(\".proto/shims/registry.json\")).unwrap()"
+source: tools/python/tests/shims_test.rs
+expression: "std :: fs ::\nread_to_string(sandbox.path().join(\".proto/shims/registry.json\")).unwrap()"
 ---
 {
   "pip": {
@@ -10,16 +10,5 @@ expression: "std::fs::read_to_string(sandbox.path().join(\".proto/shims/registry
       "pip"
     ]
   },
-  "pip3": {
-    "parent": "python-test",
-    "before_args": [
-      "-m",
-      "pip"
-    ]
-  },
-  "python-test": {},
-  "python-test3": {
-    "alt_bin": true,
-    "parent": "python-test"
-  }
+  "python": {}
 }

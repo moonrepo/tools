@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+#### 💥 Breaking
+
+- Removed `python<major>` and `pip<major>` executables. Use the new proto bins feature in v0.42 instead.
+
+#### 🚀 Updates
+
+- Added `~/.local/bin` as a globals lookup directory.
+- Updated to support proto v0.42 release.
+
 ## 0.11.0
 
 #### 🚀 Updates

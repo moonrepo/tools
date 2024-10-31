@@ -11,7 +11,6 @@ extern "ExtismHost" {
 }
 
 static NAME: &str = "Go";
-static BIN: &str = "go";
 
 #[plugin_fn]
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
@@ -19,7 +18,8 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
         name: NAME.into(),
         type_of: PluginType::Language,
         config_schema: Some(SchemaBuilder::build_root::<GoPluginConfig>()),
-        plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
+        minimum_proto_version: Some(Version::new(0, 42, 0)),
+        plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
         ..ToolMetadataOutput::default()
     }))
 }
@@ -108,7 +108,7 @@ pub fn download_prebuilt(
         _ => unreachable!(),
     };
 
-    let filename = if env.os == HostOS::Windows {
+    let filename = if env.os.is_windows() {
         format!("{prefix}.zip")
     } else {
         format!("{prefix}.tar.gz")
@@ -137,19 +137,22 @@ pub fn locate_executables(
     let env = get_host_environment()?;
 
     Ok(Json(LocateExecutablesOutput {
+        exes: HashMap::from_iter([
+            (
+                "go".into(),
+                ExecutableConfig::new_primary(env.os.get_exe_name("bin/go")),
+            ),
+            (
+                "gofmt".into(),
+                ExecutableConfig::new(env.os.get_exe_name("bin/gofmt")),
+            ),
+        ]),
         globals_lookup_dirs: vec![
             "$GOBIN".into(),
             "$GOROOT/bin".into(),
             "$GOPATH/bin".into(),
             "$HOME/go/bin".into(),
         ],
-        primary: Some(ExecutableConfig::new(
-            env.os.get_exe_name(format!("bin/{}", BIN)),
-        )),
-        secondary: HashMap::from_iter([(
-            "gofmt".into(),
-            ExecutableConfig::new(env.os.get_exe_name("bin/gofmt")),
-        )]),
         ..LocateExecutablesOutput::default()
     }))
 }

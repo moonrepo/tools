@@ -1,5 +1,28 @@
 use proto_pdk_test_utils::*;
 
+#[tokio::test(flavor = "multi_thread")]
+async fn parses_volta_extends() {
+    let sandbox = create_empty_proto_sandbox();
+    sandbox.create_file("package.json", r#"{ "volta": { "extends": "./a.json" } }"#);
+    sandbox.create_file("a.json", r#"{ "volta": { "extends": "./b.json" } }"#);
+    sandbox.create_file("b.json", r#"{ "volta": { "npm": "1.2.3" } }"#);
+
+    let plugin = sandbox.create_plugin("npm-test").await;
+
+    assert_eq!(
+        plugin
+            .parse_version_file(ParseVersionFileInput {
+                content: r#"{ "volta": { "extends": "./a.json" } }"#.into(),
+                file: "package.json".into(),
+                path: VirtualPath::OnlyReal(sandbox.path().join("package.json")),
+            })
+            .await,
+        ParseVersionFileOutput {
+            version: Some(UnresolvedVersionSpec::parse("1.2.3").unwrap()),
+        }
+    );
+}
+
 mod npm {
     use super::*;
 
@@ -19,6 +42,7 @@ mod npm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "yarn@1.2.3" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput { version: None }
@@ -35,6 +59,7 @@ mod npm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "npm@1.2.3" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -52,6 +77,7 @@ mod npm {
             plugin.parse_version_file(ParseVersionFileInput {
                 content: r#"{ "packageManager": "npm@1.2.3+sha256.c362077587b1e782e5aef3dcf85826399ae552ad66b760e2585c4ac11102243f" }"#.into(),
                 file: "package.json".into(),
+                    ..Default::default()
             }).await,
             ParseVersionFileOutput {
                 version: Some(UnresolvedVersionSpec::parse("1.2.3").unwrap()),
@@ -69,6 +95,7 @@ mod npm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "npm" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -87,6 +114,7 @@ mod npm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "engines": { "npm": "1.2.3" } }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -105,6 +133,7 @@ mod npm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "volta": { "npm": "1.2.3" } }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -133,6 +162,7 @@ mod pnpm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "yarn@1.2.3" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput { version: None }
@@ -149,6 +179,7 @@ mod pnpm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "pnpm@1.2.3" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -167,6 +198,7 @@ mod pnpm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "pnpm" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -185,6 +217,7 @@ mod pnpm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "engines": { "pnpm": "1.2.3" } }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -203,6 +236,7 @@ mod pnpm {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "volta": { "pnpm": "1.2.3" } }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -218,7 +252,7 @@ mod yarn {
     generate_resolve_versions_tests!("yarn-test", {
         "1" => "1.22.22",
         "2" => "2.4.3",
-        "3" => "3.8.5",
+        "3" => "3.8.6",
         // "berry" => "4.3.1",
     });
 
@@ -232,6 +266,7 @@ mod yarn {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "pnpm@1.2.3" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput { version: None }
@@ -248,6 +283,7 @@ mod yarn {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "yarn@1.2.3" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -266,6 +302,7 @@ mod yarn {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "packageManager": "yarn" }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -284,6 +321,7 @@ mod yarn {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "engines": { "yarn": "1.2.3" } }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {
@@ -302,6 +340,7 @@ mod yarn {
                 .parse_version_file(ParseVersionFileInput {
                     content: r#"{ "volta": { "yarn": "1.2.3" } }"#.into(),
                     file: "package.json".into(),
+                    ..Default::default()
                 })
                 .await,
             ParseVersionFileOutput {

@@ -9,5 +9,8 @@ async fn registers_metadata() {
 
     assert_eq!(metadata.name, "Deno");
     assert_eq!(metadata.self_upgrade_commands, vec!["upgrade"]);
-    assert_eq!(metadata.plugin_version.unwrap(), env!("CARGO_PKG_VERSION"));
+    assert_eq!(
+        metadata.plugin_version.unwrap().to_string(),
+        env!("CARGO_PKG_VERSION")
+    );
 }

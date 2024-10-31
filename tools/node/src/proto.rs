@@ -4,6 +4,7 @@ use node_common::{NodeDistLTS, NodeDistVersion, VoltaField};
 use nodejs_package_json::PackageJson;
 use proto_pdk::*;
 use schematic::SchemaBuilder;
+use std::collections::HashMap;
 
 #[host_fn]
 extern "ExtismHost" {
@@ -11,7 +12,6 @@ extern "ExtismHost" {
 }
 
 static NAME: &str = "Node.js";
-static BIN: &str = "node";
 
 #[plugin_fn]
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
@@ -19,7 +19,8 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
         name: NAME.into(),
         type_of: PluginType::Language,
         config_schema: Some(SchemaBuilder::build_root::<NodePluginConfig>()),
-        plugin_version: Some(env!("CARGO_PKG_VERSION").into()),
+        minimum_proto_version: Some(Version::new(0, 42, 0)),
+        plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
         ..ToolMetadataOutput::default()
     }))
 }
@@ -45,7 +46,7 @@ pub fn parse_version_file(
     if input.file == "package.json" {
         if let Ok(mut package_json) = json::from_str::<PackageJson>(&input.content) {
             if let Some(engines) = package_json.engines {
-                if let Some(constraint) = engines.get(BIN) {
+                if let Some(constraint) = engines.get("node") {
                     version = Some(UnresolvedVersionSpec::parse(constraint)?);
                 }
             }
@@ -160,7 +161,7 @@ pub fn download_prebuilt(
         HostArch::Arm => "armv7l".into(),
         HostArch::Arm64 => "arm64".into(),
         HostArch::Powerpc64 => {
-            if env.os == HostOS::Linux {
+            if env.os.is_linux() {
                 "ppc64le".into()
             } else {
                 "ppc64".into()
@@ -209,7 +210,7 @@ pub fn download_prebuilt(
         _ => unreachable!(),
     };
 
-    let filename = if env.os == HostOS::Windows {
+    let filename = if env.os.is_windows() {
         format!("{prefix}.zip")
     } else {
         format!("{prefix}.tar.xz")
@@ -236,17 +237,20 @@ pub fn locate_executables(
     let env = get_host_environment()?;
 
     Ok(Json(LocateExecutablesOutput {
-        exes_dir: Some(if env.os == HostOS::Windows {
+        exes: HashMap::from_iter([(
+            "node".into(),
+            ExecutableConfig::new_primary(if env.os.is_windows() {
+                "node.exe"
+            } else {
+                "bin/node"
+            }),
+        )]),
+        exes_dir: Some(if env.os.is_windows() {
             ".".into()
         } else {
             "bin".into()
         }),
         globals_lookup_dirs: vec!["$PROTO_HOME/tools/node/globals/bin".into()],
-        primary: Some(ExecutableConfig::new(if env.os == HostOS::Windows {
-            format!("{}.exe", BIN)
-        } else {
-            format!("bin/{}", BIN)
-        })),
         ..LocateExecutablesOutput::default()
     }))
 }

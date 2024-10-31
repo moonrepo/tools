@@ -50,7 +50,8 @@ mod npm {
                     },
                 })
                 .await
-                .primary
+                .exes
+                .get("npm")
                 .unwrap()
                 .exe_path,
             Some("bin/npm-cli.js".into())
@@ -108,7 +109,8 @@ mod pnpm {
                     },
                 })
                 .await
-                .primary
+                .exes
+                .get("pnpm")
                 .unwrap()
                 .exe_path,
             Some("bin/pnpm.cjs".into())
@@ -166,7 +168,8 @@ mod yarn {
                     },
                 })
                 .await
-                .primary
+                .exes
+                .get("yarn")
                 .unwrap()
                 .exe_path,
             Some("bin/yarn.js".into())
@@ -232,7 +235,8 @@ mod yarn_berry {
                     },
                 })
                 .await
-                .primary
+                .exes
+                .get("yarn")
                 .unwrap()
                 .exe_path,
             Some("bin/yarn.js".into())

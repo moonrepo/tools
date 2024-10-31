@@ -192,7 +192,8 @@ async fn locates_unix_bin() {
                 }
             })
             .await
-            .primary
+            .exes
+            .get("bun")
             .unwrap()
             .exe_path,
         Some("bun".into())
@@ -217,7 +218,8 @@ async fn locates_windows_bin() {
                 }
             })
             .await
-            .primary
+            .exes
+            .get("bun")
             .unwrap()
             .exe_path,
         Some("bun.exe".into())
