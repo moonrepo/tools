@@ -124,6 +124,7 @@ pub struct Schema {
     pub type_of: SchemaType,
     pub metadata: MetadataSchema,
     pub platform: HashMap<HostOS, PlatformMapper>,
+    pub deprecations: Vec<String>,
 
     pub detect: DetectSchema,
     pub install: InstallSchema,

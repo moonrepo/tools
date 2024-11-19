@@ -40,7 +40,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
     let env = get_host_environment()?;
     let schema = get_schema()?;
     let platform = get_platform(&schema, &env)?;
-    let mut deprecations = vec![];
+    let mut deprecations = schema.deprecations.clone();
 
     #[allow(deprecated)]
     if platform.bin_path.is_some() {
@@ -361,11 +361,13 @@ pub fn locate_executables(
     let prepare_primary_exe = |config: &mut ExecutableConfig| {
         config.primary = true;
 
+        #[allow(deprecated)]
         let exe_path = append_exe_ext(
             // Name from platform
             platform
                 .exe_path
                 .as_ref()
+                .or(platform.bin_path.as_ref())
                 // Name from config
                 .or(config.exe_path.as_ref())
                 // Name from plugin ID

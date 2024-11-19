@@ -10,7 +10,8 @@ exe-path = "lin/moon"
 [platform.macos]
 checksum-file = "SHASUM256.txt"
 download-file = "moon-{arch}-apple-darwin"
-exe-path = "mac/moon"
+# Use deprecated field
+bin-path = "mac/moon"
 
 [platform.windows]
 download-file = "moon-{arch}-pc-windows-msvc.exe"

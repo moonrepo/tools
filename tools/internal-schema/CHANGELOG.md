@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Added deprecation messages for old settings.
+- Added support for custom `deprecations`.
+
+#### 🐞 Fixes
+
+- Brought back `platform.*.bin_path` temporarily.
+
 ## 0.16.0
 
 #### 💥 Breaking
