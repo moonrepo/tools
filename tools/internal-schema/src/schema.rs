@@ -12,6 +12,8 @@ pub struct PlatformMapper {
     pub download_file: String,
     pub exes_dir: Option<PathBuf>,
     pub exe_path: Option<PathBuf>,
+    #[deprecated]
+    pub bin_path: Option<PathBuf>,
 }
 
 #[derive(Debug, Default, Deserialize)]

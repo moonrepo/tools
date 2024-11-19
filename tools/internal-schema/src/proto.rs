@@ -37,7 +37,31 @@ fn get_platform<'schema>(
 
 #[plugin_fn]
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
+    let env = get_host_environment()?;
     let schema = get_schema()?;
+    let platform = get_platform(&schema, &env)?;
+    let mut deprecations = vec![];
+
+    #[allow(deprecated)]
+    if platform.bin_path.is_some() {
+        deprecations.push(
+            format!("The <property>platform.{os}.bin-path</property> setting is deprecated, use <property>platform.{os}.exe-path</property> instead.", os = env.os)
+        );
+    }
+
+    #[allow(deprecated)]
+    if schema.install.primary.is_some() {
+        deprecations.push(
+            "The <property>install.primary</property> setting is deprecated, use <property>install.exes</property> and the <symbol>primary</symbol> flag instead.".into()
+        );
+    }
+
+    #[allow(deprecated)]
+    if !schema.install.secondary.is_empty() {
+        deprecations.push(
+            "The <property>install.secondary</property> setting is deprecated, use <property>install.exes</property> instead.".into()
+        );
+    }
 
     Ok(Json(ToolMetadataOutput {
         name: schema.name,
@@ -51,6 +75,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
         // minimum_proto_version: Some(Version::new(0, 42, 0)),
         plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
         self_upgrade_commands: schema.metadata.self_upgrade_commands,
+        deprecations,
         ..ToolMetadataOutput::default()
     }))
 }
