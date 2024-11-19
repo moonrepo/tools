@@ -6,7 +6,8 @@ type = "cli"
 exe-path = "lin/moon"
 
 [platform.macos]
-exe-path = "mac/moon"
+# Use deprecated field
+bin-path = "mac/moon"
 
 [platform.windows]
 exe-path = "win/moon.exe"

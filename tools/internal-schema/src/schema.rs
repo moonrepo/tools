@@ -12,6 +12,8 @@ pub struct PlatformMapper {
     pub download_file: String,
     pub exes_dir: Option<PathBuf>,
     pub exe_path: Option<PathBuf>,
+    #[deprecated]
+    pub bin_path: Option<PathBuf>,
 }
 
 #[derive(Debug, Default, Deserialize)]
@@ -122,6 +124,7 @@ pub struct Schema {
     pub type_of: SchemaType,
     pub metadata: MetadataSchema,
     pub platform: HashMap<HostOS, PlatformMapper>,
+    pub deprecations: Vec<String>,
 
     pub detect: DetectSchema,
     pub install: InstallSchema,
