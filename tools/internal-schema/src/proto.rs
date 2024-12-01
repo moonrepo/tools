@@ -76,6 +76,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
         plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
         self_upgrade_commands: schema.metadata.self_upgrade_commands,
         deprecations,
+        requires: schema.metadata.requires,
         ..ToolMetadataOutput::default()
     }))
 }
