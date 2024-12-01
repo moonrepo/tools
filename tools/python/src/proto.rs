@@ -165,12 +165,12 @@ pub fn locate_executables(
     // When on Unix, the executable returned from `PYTHON.json` is `pythonX.X`,
     // but this causes issues with our bin linking strategy, as the version in the
     // file name can be different than the one resolved, resulting in invalid
-    // symlinks. To work around this, we can use `pythonX` instead.
-    if !env.os.is_windows() && input.context.version.as_version().is_some() {
-        exe_path = format!(
-            "install/bin/python{}",
-            input.context.version.as_version().unwrap().major
-        );
+    // symlinks. To work around this, we can use `pythonX` instead, if `python`
+    // itself doesn't exist (which is true for some versions).
+    if !env.os.is_windows() && !input.context.tool_dir.join(&exe_path).exists() {
+        if let Some(version) = input.context.version.as_version() {
+            exe_path = format!("install/bin/python{}", version.major);
+        }
     }
 
     Ok(Json(LocateExecutablesOutput {
