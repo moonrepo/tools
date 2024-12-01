@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Added `node` as a required plugin for this plugin to function correctly.
+
 ## 0.14.0
 
 #### 🚀 Updates
