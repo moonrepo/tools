@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🐞 Fixes
+
+- Fixed an issue where our bin linking strategy would point to an invalid executable path.
+
 ## 0.12.0
 
 #### 💥 Breaking
