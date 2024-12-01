@@ -14,13 +14,6 @@ extern "ExtismHost" {
 
 static NAME: &str = "Python";
 
-#[derive(Deserialize)]
-struct PythonManifest {
-    python_exe: String,
-    // python_major_minor_version: String,
-    python_paths: HashMap<String, String>,
-}
-
 #[plugin_fn]
 pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMetadataOutput>> {
     Ok(Json(ToolMetadataOutput {
@@ -137,6 +130,13 @@ pub fn download_prebuilt(
     }))
 }
 
+#[derive(Deserialize)]
+struct PythonManifest {
+    // python_exe: String,
+    // python_major_minor_version: String,
+    python_paths: HashMap<String, String>,
+}
+
 #[plugin_fn]
 pub fn locate_executables(
     Json(input): Json<LocateExecutablesInput>,
@@ -157,11 +157,20 @@ pub fn locate_executables(
     if manifest_path.exists() {
         let manifest: PythonManifest = json::from_slice(&fs::read(manifest_path)?)?;
 
-        exe_path = manifest.python_exe;
-
         if let Some(dir) = manifest.python_paths.get("scripts") {
             dir.clone_into(&mut exes_dir);
         }
+    }
+
+    // When on Unix, the executable returned from `PYTHON.json` is `pythonX.X`,
+    // but this causes issues with our bin linking strategy, as the version in the
+    // file name can be different than the one resolved, resulting in invalid
+    // symlinks. To work around this, we can use `pythonX` instead.
+    if !env.os.is_windows() && input.context.version.as_version().is_some() {
+        exe_path = format!(
+            "install/bin/python{}",
+            input.context.version.as_version().unwrap().major
+        );
     }
 
     Ok(Json(LocateExecutablesOutput {
