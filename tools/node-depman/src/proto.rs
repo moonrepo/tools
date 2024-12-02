@@ -32,6 +32,7 @@ pub fn register_tool(Json(_): Json<ToolMetadataInput>) -> FnResult<Json<ToolMeta
         },
         minimum_proto_version: Some(Version::new(0, 42, 0)),
         plugin_version: Version::parse(env!("CARGO_PKG_VERSION")).ok(),
+        requires: vec!["node".into()],
         ..ToolMetadataOutput::default()
     }))
 }

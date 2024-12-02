@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+#### 🚀 Updates
+
+- Added `metadata.requires`, for defining plugin requirements.
+
 ## 0.16.1
 
 #### 🚀 Updates

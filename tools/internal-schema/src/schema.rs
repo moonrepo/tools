@@ -101,6 +101,7 @@ impl Default for ResolveSchema {
 #[derive(Debug, Default, Deserialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct MetadataSchema {
+    pub requires: Vec<String>,
     pub self_upgrade_commands: Vec<String>,
 }
 
