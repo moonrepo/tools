@@ -1956,7 +1956,7 @@ dependencies = [
 
 [[package]]
 name = "node_depman_tool"
-version = "0.14.0"
+version = "0.14.1"
 dependencies = [
  "extism-pdk",
  "node_common",
