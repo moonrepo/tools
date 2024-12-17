@@ -14,7 +14,7 @@ async fn registers_metadata() {
     assert_eq!(metadata.name, "Rust");
     assert_eq!(
         metadata.default_version,
-        Some(UnresolvedVersionSpec::Alias("stable".to_owned()))
+        Some(UnresolvedVersionSpec::parse("stable").unwrap())
     );
     assert!(metadata.inventory.override_dir.is_some());
     assert!(metadata.inventory.version_suffix.is_some());
