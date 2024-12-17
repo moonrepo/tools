@@ -132,7 +132,7 @@ pub fn resolve_version(
             return Ok(Json(output));
         };
 
-        output.candidate = Some(UnresolvedVersionSpec::Alias(candidate.to_owned()));
+        output.candidate = UnresolvedVersionSpec::parse(candidate.to_string()).ok();
     }
 
     Ok(Json(output))
