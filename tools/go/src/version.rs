@@ -24,7 +24,7 @@ pub fn from_go_version(version: &str) -> String {
 pub fn to_go_version(spec: &VersionSpec) -> String {
     match spec {
         VersionSpec::Canary => "canary".into(),
-        VersionSpec::Alias(alias) => alias.into(),
+        VersionSpec::Alias(alias) => alias.to_string(),
         _ => {
             let version = spec.as_version().unwrap();
 

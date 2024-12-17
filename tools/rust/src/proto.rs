@@ -61,7 +61,7 @@ pub fn resolve_version(
 
     // Allow channels as explicit aliases
     if is_non_version_channel(&input.initial) {
-        output.version = Some(VersionSpec::Alias(input.initial.into()));
+        output.version = VersionSpec::parse(input.initial.to_string()).ok();
     } else if input.initial.is_canary() {
         output.version = Some(VersionSpec::Alias("nightly".into()));
     }
